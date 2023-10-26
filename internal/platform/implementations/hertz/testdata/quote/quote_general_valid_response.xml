@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OTA_VehModifyRS xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.opentravel.org/OTA/2003/05" EchoToken="88J006U8GF67193-6301" Target="Production" Version="1.00">
+	<Success></Success>
+	<VehModifyRSCore ModifyStatus="Pending">
+		<VehReservation>
+			<Customer>
+				<Primary>
+					<PersonName>
+						<GivenName>DAVID</GivenName>
+						<Surname>BRYANT</Surname>
+					</PersonName>
+				</Primary>
+			</Customer>
+			<VehSegmentCore>
+				<ConfID Type="14" ID="K49304992E5"/>
+				<Vendor Code="ZT"/>
+				<VehRentalCore PickUpDateTime="2023-08-03T21:00:00-06:00" ReturnDateTime="2023-08-14T07:00:00-06:00">
+					<PickUpLocation ExtendedLocationCode="SEAT01" LocationCode="SEA" CodeContext="IATA"/>
+					<ReturnLocation ExtendedLocationCode="SEAT01" LocationCode="SEA" CodeContext="IATA"/>
+				</VehRentalCore>
+				<Vehicle PassengerQuantity="5" BaggageQuantity="4" AirConditionInd="true" TransmissionType="Automatic" FuelType="Unspecified" DriveType="Unspecified" Code="FCAR" CodeContext="SIPP">
+					<VehType VehicleCategory="1"/>
+					<VehClass Size="8"/>
+					<VehMakeModel Name="F CHEVROLET MALIBU OR SIMILAR" Code="FCAR"/>
+					<PictureURL>ZEUSFCAR999.jpg</PictureURL>
+				</Vehicle>
+				<RentalRate>
+					<RateDistance Unlimited="true" DistUnitName="Mile" VehiclePeriodUnitName="RentalPeriod"/>
+					<VehicleCharges>
+						<VehicleCharge Purpose="1" TaxInclusive="false" GuaranteedInd="true" Amount="684.20" CurrencyCode="USD" IncludedInRate="false">
+							<TaxAmounts>
+								<TaxAmount Total="151.24" CurrencyCode="USD" Percentage="17.80" Description="Tax"/>
+							</TaxAmounts>
+							<Calculation UnitCharge="456.12" UnitName="Week" Quantity="1"/>
+							<Calculation UnitCharge="57.02" UnitName="Day" Quantity="4"/>
+						</VehicleCharge>
+					</VehicleCharges>
+					<RateQualifier ArriveByFlight="false" RateCategory="3" RateQualifier="L8TAM"/>
+				</RentalRate>
+				<Fees>
+					<Fee Purpose="5" TaxInclusive="false" Description="AIRPORT CONCESSION RECOVERY:" Amount="76.98" CurrencyCode="USD"/>
+					<Fee Purpose="5" TaxInclusive="false" Description="CUSTOMER FACILITY CHARGE:" Amount="79.75" CurrencyCode="USD"/>
+					<Fee Purpose="5" TaxInclusive="false" Description="VEHICLE LICENSING FEE RECOVERY:" Amount="8.69" CurrencyCode="USD"/>
+				</Fees>
+				<TotalCharge RateTotalAmount="684.20" EstimatedTotalAmount="1000.86" CurrencyCode="USD"/>
+			</VehSegmentCore>
+			<VehSegmentInfo>
+				<PricedCoverages>
+					<PricedCoverage Required="false">
+						<Coverage CoverageType="24"/>
+						<Charge TaxInclusive="false" IncludedInRate="false" CurrencyCode="USD">
+							<Calculation UnitCharge="33.99" UnitName="Day" Quantity="1"/>
+						</Charge>
+					</PricedCoverage>
+					<PricedCoverage Required="false">
+						<Coverage CoverageType="27"/>
+						<Charge TaxInclusive="false" IncludedInRate="false" CurrencyCode="USD">
+							<Calculation UnitCharge="12.34" UnitName="Day" Quantity="1"/>
+						</Charge>
+					</PricedCoverage>
+					<PricedCoverage Required="false">
+						<Coverage CoverageType="38"/>
+						<Charge TaxInclusive="false" IncludedInRate="false" CurrencyCode="USD">
+							<Calculation UnitCharge="7.51" UnitName="Day" Quantity="1"/>
+						</Charge>
+					</PricedCoverage>
+				</PricedCoverages>
+				<LocationDetails Name="SEATAC INTL AIRPORT">
+					<Address FormattedInd="false">
+						<AddressLine>3150 S 160TH STREET</AddressLine>
+						<AddressLine>SEATTLE</AddressLine>
+						<CityName>SEATAC AP</CityName>
+						<PostalCode>98188</PostalCode>
+						<StateProv StateCode="WA">WASHINGTON</StateProv>
+						<CountryName Code="US">UNITED STATES</CountryName>
+					</Address>
+					<Telephone PhoneLocationType="4" PhoneTechType="1" PhoneNumber="8772830898" FormattedInd="false"/>
+					<AdditionalInfo>
+						<OperationSchedules>
+							<OperationSchedule>
+								<OperationTimes>
+									<OperationTime Text="0600-0100 7 DAYS A WEEK"/>
+									<OperationTime Mon="true" Start="00:01" End="01:00"/>
+									<OperationTime Mon="true" Start="06:00" End="23:59"/>
+									<OperationTime Tue="true" Start="00:01" End="01:00"/>
+									<OperationTime Tue="true" Start="06:00" End="23:59"/>
+									<OperationTime Weds="true" Start="00:01" End="01:00"/>
+									<OperationTime Weds="true" Start="06:00" End="23:59"/>
+									<OperationTime Thur="true" Start="00:01" End="01:00"/>
+									<OperationTime Thur="true" Start="06:00" End="23:59"/>
+									<OperationTime Fri="true" Start="00:01" End="01:00"/>
+									<OperationTime Fri="true" Start="06:00" End="23:59"/>
+									<OperationTime Sat="true" Start="00:01" End="01:00"/>
+									<OperationTime Sat="true" Start="06:00" End="23:59"/>
+									<OperationTime Sun="true" Start="00:01" End="01:00"/>
+									<OperationTime Sun="true" Start="06:00" End="23:59"/>
+								</OperationTimes>
+							</OperationSchedule>
+						</OperationSchedules>
+					</AdditionalInfo>
+				</LocationDetails>
+			</VehSegmentInfo>
+		</VehReservation>
+	</VehModifyRSCore>
+</OTA_VehModifyRS>

@@ -1,0 +1,91 @@
+{
+	"stations": [
+		{
+			"id": 1,
+			"code": "OPO",
+			"name": "Porto Airport 2",
+			"working_days": [
+				"1",
+				"2",
+				"3",
+				"4",
+				"5",
+				"6",
+				"0",
+				"10"
+			],
+			"schedule": {
+				"week": {
+					"open_time": "09:00:00",
+					"close_time": "19:00:00",
+					"lunch_start_time": "12:00:00",
+					"lunch_end_time": "12:00:00",
+					"outofhours_start_time": "00:00:00",
+					"outofhours_end_time": "23:59:00"
+				},
+				"saturday": {
+					"open_time": "09:00:00",
+					"close_time": "19:00:00",
+					"lunch_start_time": "12:00:00",
+					"lunch_end_time": "12:00:00",
+					"outofhours_start_time": "00:00:00",
+					"outofhours_end_time": "23:59:00"
+				},
+				"sunday": {
+					"open_time": "09:00:00",
+					"close_time": "19:00:00",
+					"lunch_start_time": "12:00:00",
+					"lunch_end_time": "12:00:00",
+					"outofhours_start_time": "00:00:00",
+					"outofhours_end_time": "23:59:00"
+				},
+				"holiday": {
+					"open_time": "09:00:00",
+					"close_time": "19:00:00",
+					"lunch_start_time": "12:00:00",
+					"lunch_end_time": "12:00:00",
+					"outofhours_start_time": "00:00:00",
+					"outofhours_end_time": "23:59:00"
+				}
+			},
+			"out_of_hours": {
+				"extras": [
+					{
+						"id": 5,
+						"code": "AFTH",
+						"name": "Taxa de Fora de Horas (19:00-09:00)",
+						"fleet_id": 1
+					}
+				],
+				"charge_on_pickup": true,
+				"charge_on_dropoff": true,
+				"valid_on_lunch": false
+			},
+			"address": "Av Maria Vieira das Neves, nº 541",
+			"city": "Moreira",
+			"zip_code": "4470-222",
+			"country": {
+				"code": "PT",
+				"name": "Portugal"
+			},
+			"latitude": "41.239973",
+			"longitude": "-8.652605",
+			"phone": "+351961761966",
+			"mobile": "",
+			"fax": "",
+			"email": "porto@oporent.com",
+			"allows_checkin": true,
+			"allows_checkout": true,
+			"observations": ""
+		}
+	],
+	"meta": {
+		"pagination": {
+			"total": 2,
+			"count": 1,
+			"per_page": 1,
+			"current_page": 2,
+			"total_pages": 2
+		}
+	}
+}

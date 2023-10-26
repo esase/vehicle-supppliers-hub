@@ -1,0 +1,37 @@
+<MakeBookingRQ version="1.1" correlationId="82428499" insuranceVersion="1.0" cor="ee">
+	<Credentials username="test-user" password="test-password"></Credentials>
+	<Booking>
+		<PickUp>
+			<Location id="4658225"></Location>
+			<Date year="2023" month="9" day="1" hour="12" minute="30"></Date>
+		</PickUp>
+		<DropOff>
+			<Location id="4658225"></Location>
+			<Date year="2023" month="9" day="2" hour="12" minute="30"></Date>
+		</DropOff>
+		<ExtraList>
+			<Extra id="607304703" amount="1"></Extra>
+			<Extra id="607304702" amount="10"></Extra>
+		</ExtraList>
+		<Vehicle id="740171366"></Vehicle>
+		<DriverInfo>
+			<DriverName title="Mr" firstname="tester" lastname="tester"></DriverName>
+			<Address country="ee"></Address>
+			<Email>example@exampleemail.com</Email>
+			<Telephone></Telephone>
+			<DriverAge>18</DriverAge>
+		</DriverInfo>
+		<PaymentInfo depositPayment="false">
+			<CardVaultToken>e33aa365-4c80-11ee-a24c-005056b6f34b</CardVaultToken>
+			<ThreeDSecure>
+				<Eci>05</Eci>
+				<Cavv>3q2+78r+ur7erb7vyv66vv////8=</Cavv>
+				<Aav></Aav>
+				<Aevv></Aevv>
+				<DsTransId>Uhhh ahhh</DsTransId>
+			</ThreeDSecure>
+		</PaymentInfo>
+		<AirlineInfo flightNo="841"></AirlineInfo>
+		<AcceptedPrice price="42.61" currency="USD"></AcceptedPrice>
+	</Booking>
+</MakeBookingRQ>

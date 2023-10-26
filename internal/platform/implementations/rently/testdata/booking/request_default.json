@@ -1,0 +1,16 @@
+{
+	"model": 18,
+	"fromDate": "2023-09-01T12:30:00Z",
+	"toDate": "2023-09-02T12:30:00Z",
+	"deliveryPlace": 169,
+	"dropoffPlace": 169,
+	"externalSystemBookingId": "82428499",
+	"commercialAgreementCode": "Prepaid",
+	"customer": {
+		"name": "tester tester",
+		"emailAddress": "example@exampleemail.com",
+		"cellPhone": "",
+		"country": "ee",
+		"age": 18
+	}
+}

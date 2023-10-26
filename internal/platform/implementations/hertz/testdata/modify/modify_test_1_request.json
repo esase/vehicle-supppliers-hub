@@ -1,0 +1,94 @@
+{
+	"pickUp": {
+		"code": "MIA",
+		"dateTime": "2023-07-20T14:00:00Z",
+		"timeZone": "America/New_York",
+		"country": "US"
+	},
+	"dropOff": {
+		"code": "MIA",
+		"dateTime": "2023-08-03T14:00:00Z",
+		"timeZone": "America/New_York",
+		"country": "US"
+	},
+	"rentalDays": 14,
+	"contract": {
+		"currency": "USD",
+		"supplierId": 307,
+		"contractId": "44157",
+		"paymentType": 0,
+		"markUp": 17
+	},
+	"booking": {
+		"pricelistId": 1171529
+	},
+	"vehicleClass": "CFAR",
+	"supplierRateReference": "{\"fromRates\":\"DUOZ2IYVQN56834-6307\",\"estimatedTotalAmount\":\"742.65\",\"estimatedTotalAmountCurrency\":\"USD\",\"fromQuote\":\"O7PAKPTU7J93025-6301\"}",
+	"brokerReference": "72589586",
+	"reservNumber": "72589585",
+	"carSupplierPaymentPrice": {
+		"amount": 430.74,
+		"currency": "USD"
+	},
+	"carSupplierPaymentPriceInPaymentCurrency": {
+		"amount": 430.74,
+		"currency": "USD"
+	},
+	"bookingDateTime": "2023-05-11T11:21:34Z",
+	"flightNumber": "LA 4400",
+	"comments": {
+		"customer": ""
+	},
+	"customer": {
+		"title": "Mr",
+		"firstName": "Roman",
+		"lastName": "Henao",
+		"residenceCountry": "US",
+		"age": 35,
+		"phone": "+44 20 8123 1733",
+		"email": "reservations+72589585@caribbtravel.com"
+	},
+	"extrasAndFees": [],
+	"moduleId": 271,
+	"configuration": {
+		"supplierApiUrl": "{{supplierApiUrl}}",
+		"vendorCode": "ZT",
+		"vendorCodeImport": "ZT",
+		"vehicleWhereAtMapping": {
+			"LAP": 14,
+			"LDT": 7,
+			"LAM": 4,
+			"LHT": 5
+		},
+		"maxResponses": "15",
+		"sendVoucher": true,
+		"taxExclCoverageCountries": [
+			"NO",
+			"SE",
+			"DK"
+		],
+		"sendBookingDataForRates": true,
+		"fpPayFeesLocally": true,
+		"cacheEnabled": true,
+		"cacheTTLInSeconds": 28800,
+		"measureDifferencesInCacheAndLiveResponses": true,
+		"buildCacheKeyUsingBookingDuration": true,
+		"taco": "00295632",
+		"vc": "T20C3I9N14T",
+		"vn": "T007",
+		"cp": "D4D6",
+		"tour": "IT1000254TAM",
+		"lastName": "Henao",
+		"residenceCountry": "US",
+		"bookingAgent": "HZ00295632",
+		"rateQualifier": "L8TAM"
+	},
+	"timeouts": {
+		"default": 8000,
+		"booking": 60000
+	},
+	"language": "en-us",
+	"flightNo": "4400",
+	"airlineCode": "LA",
+	"supplierBookingReference": "K4772469659"
+}

@@ -1,0 +1,11 @@
+{
+	"booking":{
+		"id":15,
+		"value":29,
+		"currency":"EUR",
+		"driver_id":21,
+		"secondary_driver_ids":[],
+		"customer_id":21,
+		"status":"FULFILLED"
+	}
+}

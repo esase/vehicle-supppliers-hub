@@ -1,0 +1,28 @@
+FROM golang:1.20-alpine3.17
+
+WORKDIR /app
+
+RUN apk add --update --no-cache git
+
+COPY go.mod ./
+COPY go.sum ./
+
+# ssh setup for CRG go packages
+RUN apk add openssh-client
+RUN mkdir /root/.ssh
+COPY known_hosts /root/.ssh/known_hosts
+COPY packages_id_rsa /root/.ssh/id_rsa
+RUN chmod 600 /root/.ssh/id_rsa
+RUN eval $(ssh-agent -s) && ssh-add /root/.ssh/id_rsa
+RUN git config --global url.git@bitbucket.org:.insteadOf https://bitbucket.org/
+ENV GOPRIVATE=bitbucket.org
+
+RUN go mod download
+
+COPY . .
+
+RUN go test ./...
+
+RUN apk add --update --no-cache make cmake g++ python3 curl
+
+LABEL com.carrentalgateway.build.intermediate-tag=services/supplier-hub-integration/intermediate/build

@@ -1,0 +1,9 @@
+{
+	"errors": [
+	{
+		"code": "SupplierError",
+		"message": "Token not provided"
+	}
+	],
+	"locations": []
+}

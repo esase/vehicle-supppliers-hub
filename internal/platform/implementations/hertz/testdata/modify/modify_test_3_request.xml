@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OTA_VehModifyRS
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.opentravel.org/OTA/2003/05" Target="Production" Version="1.00">
+  <Success></Success>
+  <VehModifyRSCore ModifyStatus="Modified">
+    <VehReservation>
+      <Customer>
+        <Primary>
+          <PersonName>
+            <GivenName>TestJan</GivenName>
+            <Surname>TEstGateway</Surname>
+          </PersonName>
+        </Primary>
+      </Customer>
+      <VehSegmentCore>
+        <ConfID Type="14" ID="K4772469659"/>
+        <Vendor Code="ZT"/>
+        <VehRentalCore PickUpDateTime="2023-07-20T14:00:00-06:00" ReturnDateTime="2023-08-03T14:00:00-06:00">
+          <PickUpLocation ExtendedLocationCode="MIAT01" LocationCode="MIA" CodeContext="IATA"/>
+          <ReturnLocation ExtendedLocationCode="MIAT01" LocationCode="MIA" CodeContext="IATA"/>
+        </VehRentalCore>
+        <Vehicle PassengerQuantity="5" BaggageQuantity="2" AirConditionInd="true" TransmissionType="Automatic" FuelType="Unspecified" DriveType="Unspecified" Code="CFAR" CodeContext="SIPP">
+          <VehType VehicleCategory="3"/>
+          <VehClass Size="4"/>
+          <VehMakeModel Name="B4 BUICK ENCORE OR SIMILAR" Code="CFAR"/>
+          <PictureURL>ZEUSCFAR999.jpg</PictureURL>
+        </Vehicle>
+        <RentalRate>
+          <RateDistance Unlimited="true" DistUnitName="Mile" VehiclePeriodUnitName="RentalPeriod"/>
+          <VehicleCharges>
+            <VehicleCharge Purpose="1" TaxInclusive="false" GuaranteedInd="true" Amount="518.96" CurrencyCode="USD" IncludedInRate="false">
+              <TaxAmounts>
+                <TaxAmount Total="48.59" CurrencyCode="USD" Percentage=" 7.00" Description="Tax"/>
+              </TaxAmounts>
+              <Calculation UnitCharge="259.48" UnitName="Week" Quantity="2"/>
+            </VehicleCharge>
+          </VehicleCharges>
+          <RateQualifier ArriveByFlight="false" RateCategory="3" RateQualifier="L8TAM"/>
+        </RentalRate>
+        <Fees>
+          <Fee Purpose="5" TaxInclusive="false" Description="AIRPORT CONCESSION RECOVERY:" Amount="59.44" CurrencyCode="USD"/>
+          <Fee Purpose="5" TaxInclusive="false" Description="RENTAL SURCHARGE:" Amount="28.28" CurrencyCode="USD"/>
+          <Fee Purpose="5" TaxInclusive="false" Description="CUSTOMER FACILITY CHARGE:" Amount="71.40" CurrencyCode="USD"/>
+          <Fee Purpose="5" TaxInclusive="false" Description="VEHICLE LICENSING FEE RECOVERY:" Amount="15.98" CurrencyCode="USD"/>
+        </Fees>
+        <TotalCharge RateTotalAmount="518.96" EstimatedTotalAmount="742.65" CurrencyCode="USD"/>
+      </VehSegmentCore>
+      <VehSegmentInfo>
+        <PricedCoverages>
+          <PricedCoverage Required="false">
+            <Coverage CoverageType="24"/>
+            <Charge TaxInclusive="false" IncludedInRate="false" CurrencyCode="USD">
+              <Calculation UnitCharge="33.99" UnitName="Day" Quantity="1"/>
+            </Charge>
+          </PricedCoverage>
+          <PricedCoverage Required="false">
+            <Coverage CoverageType="27"/>
+            <Charge TaxInclusive="false" IncludedInRate="false" CurrencyCode="USD">
+              <Calculation UnitCharge="15.88" UnitName="Day" Quantity="1"/>
+            </Charge>
+          </PricedCoverage>
+          <PricedCoverage Required="false">
+            <Coverage CoverageType="38"/>
+            <Charge TaxInclusive="false" IncludedInRate="false" CurrencyCode="USD">
+              <Calculation UnitCharge="7.51" UnitName="Day" Quantity="1"/>
+            </Charge>
+          </PricedCoverage>
+        </PricedCoverages>
+      </VehSegmentInfo>
+    </VehReservation>
+  </VehModifyRSCore>
+</OTA_VehModifyRS>

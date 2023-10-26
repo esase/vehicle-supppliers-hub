@@ -1,0 +1,9 @@
+{
+	"errors": [
+		{
+			"code": "SupplierError",
+			"message": "supplier returned status code 403"
+		}
+		],
+	"status": "FAILED"
+}

@@ -1,0 +1,149 @@
+{
+	"errors": [],
+	"vehicles": [
+		{
+			"acrissCode": "FCMR",
+			"bigSuitcases": 2,
+			"class": "FCMR",
+			"doors": 4,
+			"extrasAndFees": [
+			{
+				"code": "TheftExcess",
+				"excess": {
+					"amount": 4200.00,
+					"currency": "USD"
+				},
+				"includedInRate": true,
+				"mandatory": true,
+				"name": "TheftExcess",
+				"payLocal": false,
+				"price": {
+					"amount": 0.00,
+					"currency": "USD"
+				},
+				"type": "VCT",
+				"unit": "per rental"
+			},
+			{
+				"code": "DamageExcess",
+				"excess": {
+					"amount": 2100.00,
+					"currency": "USD"
+				},
+				"includedInRate": true,
+				"mandatory": true,
+				"name": "DamageExcess",
+				"payLocal": false,
+				"price": {
+					"amount": 0.00,
+					"currency": "USD"
+				},
+				"type": "VCT",
+				"unit": "per rental"
+			},
+			{
+				"code": "RolloverExcess",
+				"excess": {
+					"amount": 4200.00,
+					"currency": "USD"
+				},
+				"includedInRate": true,
+				"mandatory": true,
+				"name": "RolloverExcess",
+				"payLocal": false,
+				"price": {
+					"amount": 0.00,
+					"currency": "USD"
+				},
+				"type": "VCT",
+				"unit": "per rental"
+			},
+			{
+				"code": "3",
+				"includedInRate": false,
+				"mandatory": false,
+				"maxQuantity": 1,
+				"name": "Baby seat (1-3 years)",
+				"payLocal": true,
+				"price": {
+					"amount": 7.59,
+					"currency": "USD"
+				},
+				"type": "EQP",
+				"unit": "per rental"
+			},
+			{
+				"code": "7",
+				"includedInRate": false,
+				"mandatory": false,
+				"maxQuantity": 1,
+				"name": "Additional Driver",
+				"payLocal": true,
+				"price": {
+					"amount": 3.43,
+					"currency": "USD"
+				},
+				"type": "EQP",
+				"unit": "per rental"
+			},
+			{
+				"code": "25",
+				"includedInRate": false,
+				"mandatory": false,
+				"maxQuantity": 1,
+				"name": "After Hours",
+				"payLocal": true,
+				"price": {
+					"amount": 27.67,
+					"currency": "USD"
+				},
+				"type": "EQP",
+				"unit": "per rental"
+			},
+			{
+				"code": "4",
+				"includedInRate": false,
+				"mandatory": false,
+				"maxQuantity": 1,
+				"name": "Booster (4-10 years)",
+				"payLocal": true,
+				"price": {
+					"amount": 7.59,
+					"currency": "USD"
+				},
+				"type": "EQP",
+				"unit": "per rental"
+			},
+			{
+				"code": "13",
+				"includedInRate": false,
+				"mandatory": false,
+				"maxQuantity": 1,
+				"name": "Full Damage Waiver (FDW)",
+				"payLocal": true,
+				"price": {
+					"amount": 36.55,
+					"currency": "USD"
+				},
+				"type": "VCP",
+				"unit": "per rental"
+			}
+			],
+			"hasAirco": true,
+			"imageUrl": "https://rently.blob.core.windows.net/network/models/df4b3bd8-d46f-4973-9b7a-eb6eda2bc76c.JPG",
+			"mileage": {
+				"unlimited": false
+			},
+			"name": "Chevrolet Onix Plus",
+			"price": {
+				"amount": 185.14,
+				"currency": "USD"
+			},
+			"seats": 5,
+			"smallSuitcases": 1,
+			"status": "AVAILABLE",
+			"supplierRateReference": "{\"model\":15}",
+			"transmissionType": "Manual"
+		}
+	]
+}

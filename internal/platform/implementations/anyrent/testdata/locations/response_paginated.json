@@ -1,0 +1,117 @@
+{
+	"errors": [],
+	"locations": [
+	{
+		"address": "Av Maria Vieira das Neves, nº 541",
+		"city": "Moreira",
+		"code": "OPO",
+		"country": "PT",
+		"latitude": 41.23997,
+		"longitude": -8.652605,
+		"name": "Porto Airport",
+		"openingHours": [
+		{
+			"end": "19:00",
+			"open": true,
+			"start": "09:00",
+			"weekday": 0
+		},
+		{
+			"end": "23:59",
+			"ooh": true,
+			"open": true,
+			"start": "00:00",
+			"weekday": 0
+		},
+		{
+			"end": "19:00",
+			"open": true,
+			"start": "09:00",
+			"weekday": 6
+		},
+		{
+			"end": "23:59",
+			"ooh": true,
+			"open": true,
+			"start": "00:00",
+			"weekday": 6
+		},
+		{
+			"end": "19:00",
+			"open": true,
+			"start": "09:00",
+			"weekday": 7
+		},
+		{
+			"end": "23:59",
+			"ooh": true,
+			"open": true,
+			"start": "00:00",
+			"weekday": 7
+		}
+		],
+		"phone": "+351961761966",
+		"postalCode": "4470-222",
+		"rawData": {
+		"content": "{\"id\":1,\"code\":\"OPO\",\"name\":\"Porto Airport\",\"country\":{\"code\":\"PT\",\"name\":\"Portugal\"},\"city\":\"Moreira\",\"address\":\"Av Maria Vieira das Neves, nº 541\",\"zip_code\":\"4470-222\",\"latitude\":\"41.239973\",\"longitude\":\"-8.652605\",\"phone\":\"+351961761966\",\"out_of_hours\":{\"charge_on_pickup\":true,\"charge_on_dropoff\":true},\"schedule\":{\"week\":{\"open_time\":\"09:00:00\",\"close_time\":\"19:00:00\",\"lunch_start_time\":\"12:00:00\",\"lunch_end_time\":\"12:00:00\",\"outofhours_start_time\":\"00:00:00\",\"outofhours_end_time\":\"23:59:00\"},\"saturday\":{\"open_time\":\"09:00:00\",\"close_time\":\"19:00:00\",\"lunch_start_time\":\"12:00:00\",\"lunch_end_time\":\"12:00:00\",\"outofhours_start_time\":\"00:00:00\",\"outofhours_end_time\":\"23:59:00\"},\"sunday\":{\"open_time\":\"09:00:00\",\"close_time\":\"19:00:00\",\"lunch_start_time\":\"12:00:00\",\"lunch_end_time\":\"12:00:00\",\"outofhours_start_time\":\"00:00:00\",\"outofhours_end_time\":\"23:59:00\"},\"holiday\":{\"open_time\":\"09:00:00\",\"close_time\":\"19:00:00\",\"lunch_start_time\":\"12:00:00\",\"lunch_end_time\":\"12:00:00\",\"outofhours_start_time\":\"00:00:00\",\"outofhours_end_time\":\"23:59:00\"}}}",
+		"contentType": "application/json"
+		}
+	},
+	{
+		"address": "Av Maria Vieira das Neves, nº 541",
+		"city": "Moreira",
+		"code": "OPO",
+		"country": "PT",
+		"latitude": 41.23997,
+		"longitude": -8.652605,
+		"name": "Porto Airport 2",
+		"openingHours": [
+		{
+			"end": "19:00",
+			"open": true,
+			"start": "09:00",
+			"weekday": 0
+		},
+		{
+			"end": "23:59",
+			"ooh": true,
+			"open": true,
+			"start": "00:00",
+			"weekday": 0
+		},
+		{
+			"end": "19:00",
+			"open": true,
+			"start": "09:00",
+			"weekday": 6
+		},
+		{
+			"end": "23:59",
+			"ooh": true,
+			"open": true,
+			"start": "00:00",
+			"weekday": 6
+		},
+		{
+			"end": "19:00",
+			"open": true,
+			"start": "09:00",
+			"weekday": 7
+		},
+		{
+			"end": "23:59",
+			"ooh": true,
+			"open": true,
+			"start": "00:00",
+			"weekday": 7
+		}
+		],
+		"phone": "+351961761966",
+		"postalCode": "4470-222",
+		"rawData": {
+		"content": "{\"id\":1,\"code\":\"OPO\",\"name\":\"Porto Airport 2\",\"country\":{\"code\":\"PT\",\"name\":\"Portugal\"},\"city\":\"Moreira\",\"address\":\"Av Maria Vieira das Neves, nº 541\",\"zip_code\":\"4470-222\",\"latitude\":\"41.239973\",\"longitude\":\"-8.652605\",\"phone\":\"+351961761966\",\"out_of_hours\":{\"charge_on_pickup\":true,\"charge_on_dropoff\":true},\"schedule\":{\"week\":{\"open_time\":\"09:00:00\",\"close_time\":\"19:00:00\",\"lunch_start_time\":\"12:00:00\",\"lunch_end_time\":\"12:00:00\",\"outofhours_start_time\":\"00:00:00\",\"outofhours_end_time\":\"23:59:00\"},\"saturday\":{\"open_time\":\"09:00:00\",\"close_time\":\"19:00:00\",\"lunch_start_time\":\"12:00:00\",\"lunch_end_time\":\"12:00:00\",\"outofhours_start_time\":\"00:00:00\",\"outofhours_end_time\":\"23:59:00\"},\"sunday\":{\"open_time\":\"09:00:00\",\"close_time\":\"19:00:00\",\"lunch_start_time\":\"12:00:00\",\"lunch_end_time\":\"12:00:00\",\"outofhours_start_time\":\"00:00:00\",\"outofhours_end_time\":\"23:59:00\"},\"holiday\":{\"open_time\":\"09:00:00\",\"close_time\":\"19:00:00\",\"lunch_start_time\":\"12:00:00\",\"lunch_end_time\":\"12:00:00\",\"outofhours_start_time\":\"00:00:00\",\"outofhours_end_time\":\"23:59:00\"}}}",
+		"contentType": "application/json"
+		}
+	}
+	]
+}

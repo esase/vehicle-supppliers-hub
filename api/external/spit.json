@@ -1,0 +1,824 @@
+{
+	"openapi": "3.0.0",
+	"info": {
+		"title": "SPiT",
+		"version": "0.0.1"
+	},
+	"paths": {
+		"/": {
+			"get": {
+				"operationId": "zabbix",
+				"description": "endpoint for Zabbix",
+				"summary": "returns 200",
+				"responses": {
+					"200": {
+						"description": "Response from '/'"
+					}
+				}
+			}
+		},
+		"/token": {
+			"post": {
+				"tags": [
+					"PCI"
+				],
+				"operationId": "tokenize",
+				"summary": "Tokenize sensitive CHD information",
+				"parameters": [
+					{
+						"$ref": "#/components/parameters/ApiKeyHeader"
+					}
+				],
+				"description": "Tokenize sensitive CHD information for 15 minutes. Token contains the full request body where CHD data has been replaced with 'spt_' tokens.\n\nToken will aso include `cardType` (enum) that is calculated based on card number: \n * `Mastercard`\n * `DinersClub`\n * `Discover`\n * `JCB`\n * `AmericanExpress`\n * `UnionPay`\n * `Maestro`\n * `Mir`\n * `Elo`\n * `Hiper`\n * `Hipercard`\n * `Visa`\n * `Unknown`\n\n Decoded token contains\n\n ``` \n{\n    'key': 'b9928a38d799457f87838b9c279f8ca83f206e86206e4f98aef2db0d7c8e85e0'\n    'cardholderName': 'spt_0d0ad904fa0947e89ee5476f54a25622'\n    'cvv': 'spt_a1ea5348005744949daa4f5de8fbdf08'\n    'expirationMonth': 3\n    'expirationYear': 2030\n    'cardNumber': 'spt_c9fdf79f9f814e5a9e60678f2add8e87'\n    'cardType': 'Visa'\n    'threeDs': {\n        'cavv': '3q2+78r+ur7erb7vyv66vv////8='\n        'transStatus': 'Y'\n        'authenticationResponse': 'Y'\n        'eciFlag': '05'\n        'transactionId': '9819fd02-f293-4b98-98a2-4163f2faeed8'\n        'version': '2.1.0'\n        'xid': '44b7a94e-4f66-4b55-a36d-50af199bc132'\n    }\n    'hmac': 'a09158f344492a8e7b377f36007692fd64b3fd8a69e56033ec56ab9b3be9a49e'\n}\n ```",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/TokenRequestParams"
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "Token that can be used in /detokenize proxy request to forward CHD data",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/TokenResponse"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/detokenize": {
+			"post": {
+				"tags": [
+					"PCI",
+					"proxy"
+				],
+				"operationId": "detokenize",
+				"summary": "Detokenize proxy",
+				"description": "Detokenize sensitive CHD information, replace it in the request body and forward it based on the X-SPT-Forward-To header. Response will be forwarded back as is.",
+				"parameters": [
+					{
+						"$ref": "#/components/parameters/UserAccessTokenHeader"
+					},
+					{
+						"$ref": "#/components/parameters/SptTokenHeader"
+					},
+					{
+						"$ref": "#/components/parameters/ForwardToHeader"
+					}
+				],
+				"requestBody": {
+					"description": "Use the values in token (with 'spt_' prefixes) to indicate where the final CHD data should be added.",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object"
+							},
+							"example": {
+								"cardholderName": "spt_286db5a8cf6b4cca84233733586c1d00",
+								"cvv": "spt_190ec01f06674c3caebb2fd09b777198",
+								"expirationMonth": 3,
+								"expirationYear": 2030,
+								"cardNumber": "spt_fcdc26e67b6243dc9c0e88ca1f538f9a",
+								"cardType": "Visa",
+								"threeDs": {
+									"eciFlag": "05",
+									"transStatus": "Y",
+									"authenticationResponse": "Y",
+									"version": "2.1.0",
+									"cavv": "3q2+78r+ur7erb7vyv66vv////8=",
+									"transactionId": "978bba28-73ff-4513-ad88-24027362f898",
+									"xid": "44b7a94e-4f66-4b55-a36d-50af199bc132"
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Response from destination"
+					},
+					"201": {
+						"description": "Response from destination"
+					},
+					"204": {
+						"description": "Response from destination"
+					},
+					"404": {
+						"description": "Token has expired and has been removed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorMessage"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/convert-token/booking-dot-com": {
+			"post": {
+				"tags": [
+					"PCI",
+					"convert"
+				],
+				"operationId": "convertTokenToBookingDotCom",
+				"summary": "Convert token to Booking.com card token",
+				"description": "Detokenize sensitive CHD information, and convert it to Booking.com card token.",
+				"parameters": [
+					{
+						"$ref": "#/components/parameters/UserAccessTokenHeader"
+					},
+					{
+						"$ref": "#/components/parameters/SptTokenHeader"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"required": [
+									"environment",
+									"affiliateCode",
+									"transactionCurrency"
+								],
+								"properties": {
+									"environment": {
+										"$ref": "#/components/schemas/ConfigEnvironment"
+									},
+									"affiliateCode": {
+										"type": "string",
+										"minLength": 1
+									},
+									"transactionCurrency": {
+										"$ref": "#/components/schemas/CurrencyCode"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "Booking.com token",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"required": [
+										"cardVaultToken"
+									],
+									"properties": {
+										"cardVaultToken": {
+											"type": "string",
+											"minLength": 1
+										},
+										"threeDs": {
+											"$ref": "#/components/schemas/ThreeDs"
+										}
+									}
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Token has expired and has been removed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorMessage"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/key": {
+			"post": {
+				"tags": [
+					"API key"
+				],
+				"operationId": "createApiKey",
+				"summary": "Create a new API key",
+				"description": "Generates a new API key that can be used by 3rd parties for tokenization requests",
+				"parameters": [
+					{
+						"$ref": "#/components/parameters/UserAccessTokenHeader"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ApiKeyCreationParams"
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "API key that can be used to generate tokens",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CreatedKeyResponse"
+								}
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"summary": "Get list of API keys",
+				"tags": [
+					"API key"
+				],
+				"operationId": "getApiKeys",
+				"parameters": [
+					{
+						"$ref": "#/components/parameters/UserAccessTokenHeader"
+					},
+					{
+						"$ref": "#/components/parameters/LimitInQuery"
+					},
+					{
+						"$ref": "#/components/parameters/PointerInQuery"
+					},
+					{
+						"$ref": "#/components/parameters/TopAgencyIdsInQuery"
+					},
+					{
+						"$ref": "#/components/parameters/UserIdsInQuery"
+					},
+					{
+						"$ref": "#/components/parameters/StatusInQuery"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "List of API keys",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/KeyListResponse"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/key/{apiKey}": {
+			"get": {
+				"tags": [
+					"API key"
+				],
+				"operationId": "getApiKey",
+				"summary": "Fetch single API key",
+				"description": "Get single API key object",
+				"parameters": [
+					{
+						"$ref": "#/components/parameters/UserAccessTokenHeader"
+					},
+					{
+						"$ref": "#/components/parameters/ApiKeyInPath"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Whole API key object",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/SingleApiKeyResponse"
+								}
+							}
+						}
+					}
+				}
+			},
+			"patch": {
+				"tags": [
+					"API key"
+				],
+				"operationId": "patchApiKey",
+				"summary": "Patch API key",
+				"parameters": [
+					{
+						"$ref": "#/components/parameters/UserAccessTokenHeader"
+					},
+					{
+						"$ref": "#/components/parameters/ApiKeyInPath"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ApiKeyPatchParams"
+							}
+						}
+					}
+				},
+				"responses": {
+					"204": {
+						"description": "API key that can be used to generate tokens"
+					}
+				}
+			}
+		},
+		"/openapi.json": {
+			"get": {
+				"description": "SPiT API",
+				"summary": "openapi.json",
+				"operationId": "getOpenApiJson",
+				"responses": {
+					"200": {
+						"description": "Description of this API formatted according to the OpenAPI Specification",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object"
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"schemas": {
+			"KeyPatchOperation": {
+				"type": "object",
+				"description": "According to RFC 6920. See examples at: https://tools.ietf.org/html/rfc6902",
+				"required": [
+					"op",
+					"path",
+					"value"
+				],
+				"properties": {
+					"op": {
+						"type": "string",
+						"enum": [
+							"replace",
+							"add",
+							"remove"
+						]
+					},
+					"path": {
+						"type": "string",
+						"enum": [
+							"/active",
+							"/description"
+						]
+					},
+					"value": {
+						"anyOf": [
+							{
+								"type": "boolean"
+							},
+							{
+								"type": "object"
+							},
+							{
+								"type": "string"
+							},
+							{
+								"type": "number"
+							},
+							{
+								"type": "array"
+							}
+						]
+					}
+				}
+			},
+			"KeyListResponse": {
+				"type": "object",
+				"properties": {
+					"keys": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/ApiKeyObject"
+						}
+					},
+					"limit": {
+						"$ref": "#/components/schemas/Limit"
+					},
+					"nextPointer": {
+						"$ref": "#/components/schemas/NextPointer"
+					}
+				}
+			},
+			"Limit": {
+				"description": "Limit number.",
+				"type": "integer",
+				"minimum": 1,
+				"maximum": 50
+			},
+			"NextPointer": {
+				"description": "Next pointer value.",
+				"type": "string",
+				"minLength": 1
+			},
+			"TokenRequestParams": {
+				"$ref": "#/components/schemas/CHD"
+			},
+			"ApiKeyPatchParams": {
+				"type": "object",
+				"required": [
+					"operations"
+				],
+				"properties": {
+					"operations": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/KeyPatchOperation"
+						},
+						"minItems": 1
+					}
+				},
+				"example": {
+					"operations": [
+						{
+							"op": "replace",
+							"path": "/description",
+							"value": "New description"
+						}
+					]
+				}
+			},
+			"ApiKeyCreationParams": {
+				"type": "object",
+				"required": [
+					"topAgencyId",
+					"agencyId",
+					"userId",
+					"description"
+				],
+				"properties": {
+					"topAgencyId": {
+						"type": "number"
+					},
+					"agencyId": {
+						"type": "number"
+					},
+					"userId": {
+						"type": "number"
+					},
+					"description": {
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 255
+					}
+				}
+			},
+			"ErrorMessage": {
+				"type": "object",
+				"required": [
+					"code"
+				],
+				"properties": {
+					"code": {
+						"type": "string",
+						"minLength": 1
+					},
+					"message": {
+						"type": "string"
+					}
+				}
+			},
+			"CHD": {
+				"required": [
+					"cvv",
+					"cardholderName",
+					"expirationMonth",
+					"expirationYear",
+					"cardNumber"
+				],
+				"properties": {
+					"cvv": {
+						"type": "string",
+						"pattern": "^\\d+$",
+						"minLength": 3,
+						"maxLength": 4
+					},
+					"cardholderName": {
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 175
+					},
+					"expirationMonth": {
+						"type": "integer",
+						"minimum": 1,
+						"maximum": 12
+					},
+					"expirationYear": {
+						"type": "integer",
+						"minimum": 1000
+					},
+					"cardNumber": {
+						"type": "string",
+						"pattern": "^\\d+$",
+						"minLength": 12,
+						"maxLength": 19
+					},
+					"threeDs": {
+						"$ref": "#/components/schemas/ThreeDs"
+					}
+				},
+				"additionalProperties": false
+			},
+			"ConfigEnvironment": {
+				"description": "Indicates where we will make the requests to.",
+				"type": "string",
+				"enum": [
+					"Sandbox",
+					"Production",
+					"Test"
+				]
+			},
+			"CurrencyCode": {
+				"description": "ISO 4217 currency code",
+				"type": "string",
+				"pattern": "^[A-Z]{3}$",
+				"minLength": 1
+			},
+			"ThreeDs": {
+				"type": "object",
+				"required": [
+					"eciFlag"
+				],
+				"properties": {
+					"transStatus": {
+						"description": "Indicates whether a transaction qualifies as an authenticated transaction or account verification.",
+						"type": "string",
+						"enum": [
+							"Y",
+							"N",
+							"U",
+							"A",
+							"C",
+							"R"
+						]
+					},
+					"authenticationResponse": {
+						"description": "transStatus from challenge response: indicates whether a transaction qualifies as an authenticated transaction or account verification.",
+						"type": "string",
+						"enum": [
+							"Y",
+							"N"
+						]
+					},
+					"cavv": {
+						"description": "Cardholder authentication verification value or CAVV. The main encrypted message issuers and card networks use to verify authentication has occurred. Mastercard uses an AVV message and American Express uses an AEVV message, each of which should also be passed in the cavv parameter.",
+						"type": "string"
+					},
+					"transactionId": {
+						"description": "Transaction identifier resulting from 3D Secure 2 authentication.",
+						"type": "string"
+					},
+					"eciFlag": {
+						"description": "The value of the electronic commerce indicator (ECI) flag, which indicates the outcome of the 3DS authentication. This will be a two-digit value.",
+						"type": "string"
+					},
+					"xid": {
+						"description": "Transaction identifier resulting from 3D Secure authentication. Uniquely identifies the transaction and sometimes required in the authorization message. This is a base64-encoded value.",
+						"type": "string"
+					},
+					"version": {
+						"description": "The version of 3D Secure authentication used for the transaction.",
+						"type": "string"
+					}
+				},
+				"additionalProperties": false
+			},
+			"TokenResponse": {
+				"type": "object",
+				"required": [
+					"token"
+				],
+				"properties": {
+					"token": {
+						"$ref": "#/components/schemas/Token"
+					}
+				}
+			},
+			"ApiKeyObject": {
+				"type": "object",
+				"required": [
+					"key",
+					"active",
+					"creatorId",
+					"updaterId",
+					"topAgencyId",
+					"agencyId",
+					"userId",
+					"createDateTime",
+					"updateDateTime",
+					"description"
+				],
+				"properties": {
+					"key": {
+						"type": "string"
+					},
+					"active": {
+						"type": "boolean"
+					},
+					"creatorId": {
+						"type": "number"
+					},
+					"updaterId": {
+						"type": "number"
+					},
+					"topAgencyId": {
+						"type": "number"
+					},
+					"agencyId": {
+						"type": "number"
+					},
+					"userId": {
+						"type": "number"
+					},
+					"createDateTime": {
+						"type": "string"
+					},
+					"updateDateTime": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					}
+				}
+			},
+			"ApiKeyPatchObject": {
+				"type": "object",
+				"required": [
+					"active",
+					"description"
+				],
+				"properties": {
+					"active": {
+						"type": "boolean"
+					},
+					"description": {
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 255
+					}
+				}
+			},
+			"CreatedKeyResponse": {
+				"type": "object",
+				"required": [
+					"key"
+				],
+				"properties": {
+					"key": {
+						"type": "string"
+					}
+				}
+			},
+			"SingleApiKeyResponse": {
+				"$ref": "#/components/schemas/ApiKeyObject"
+			},
+			"Token": {
+				"type": "string",
+				"description": "base64 encoded and versioned (1.token) token. Decoding the token will give the object that was given on tokenize request (with CHD key and hmack) but CHD data is replaced with tokens that can be used in proxy.",
+				"example": "1.eyJrZXkiOiJqZGZnamRzZ2ZqZHNnZmpkZ2ZkZ2Z1eWlkZ2Z1ZHN5Z2ZkZ2ZvdXNkZmhpZHNodWYiLCJjYXJkaG9sZGVyTmFtZSI6InNwdF9zZ2Roa2phc2RnaHNhaGRzYWlkamhhc2RrIiwiY3Z2Ijoic3B0X2FzZGFzZGhqYXNnZGFzamhkZ3NhIiwiZXhwaXJhdGlvbk1vbnRoIjozLCJleHBpcmF0aW9uWWVhciI6MjAzMCwiY2FyZE51bWJlciI6InNwdF9qaGFnZGtqYXNoZGtqc2FoZHNhaGRramFzZGhqaGFzIiwiM2RzIjp7ImVjaUZsYWciOiIwNSIsInZlcnNpb24iOiIyLjEuMCIsImNhdnYiOiIzcTIrNzhyK3VyN2VyYjd2eXY2NnZ2Ly8vLzg9IiwidHJhbnNhY3Rpb25JZCI6Ijk3OGJiYTI4LTczZmYtNDUxMy1hZDg4LTI0MDI3MzYyZjg5OCIsInhpZCI6IjQ0YjdhOTRlLTRmNjYtNGI1NS1hMzZkLTUwYWYxOTliYzEzMiJ9fQ="
+			},
+			"StatusType": {
+				"type": "string",
+				"enum": [
+					"Enabled",
+					"Disabled"
+				]
+			}
+		},
+		"parameters": {
+			"TopAgencyIdsInQuery": {
+				"name": "topAgencyIds",
+				"in": "query",
+				"required": false,
+				"schema": {
+					"description": "Top agency ids for filter",
+					"type": "array",
+					"items": {
+						"type": "integer"
+					}
+				},
+				"explode": false
+			},
+			"UserIdsInQuery": {
+				"name": "userIds",
+				"in": "query",
+				"required": false,
+				"schema": {
+					"description": "user ids for filter",
+					"type": "array",
+					"items": {
+						"type": "integer"
+					}
+				},
+				"explode": false
+			},
+			"StatusInQuery": {
+				"name": "status",
+				"in": "query",
+				"required": false,
+				"schema": {
+					"description": "Contract status to filter the contract list.",
+					"type": "array",
+					"items": {
+						"$ref": "#/components/schemas/StatusType"
+					}
+				},
+				"explode": false
+			},
+			"PointerInQuery": {
+				"name": "pointer",
+				"in": "query",
+				"description": "A pointer to a next part of data.",
+				"required": false,
+				"schema": {
+					"type": "string",
+					"minLength": 1
+				}
+			},
+			"LimitInQuery": {
+				"name": "limit",
+				"in": "query",
+				"description": "Limit number of entities.",
+				"required": false,
+				"schema": {
+					"type": "integer",
+					"minimum": 1,
+					"maximum": 50
+				}
+			},
+			"ForwardToHeader": {
+				"name": "x-spt-forward-to",
+				"in": "header",
+				"description": "The request is forwarded to",
+				"required": true,
+				"schema": {
+					"type": "string",
+					"minLength": 1
+				},
+				"example": "https://example/card"
+			},
+			"SptTokenHeader": {
+				"name": "x-spt-token",
+				"in": "header",
+				"description": "SPT token that is linked to CHD",
+				"required": true,
+				"schema": {
+					"type": "string",
+					"minLength": 1
+				},
+				"example": "1.eyJrZXkiOiJqZGZnamRzZ2ZqZHNnZmpkZ2ZkZ2Z1eWlkZ2Z1ZHN5Z2ZkZ2ZvdXNkZmhpZHNodWYiLCJjYXJkaG9sZGVyTmFtZSI6InNwdF9zZ2Roa2phc2RnaHNhaGRzYWlkamhhc2RrIiwiY3Z2Ijoic3B0X2FzZGFzZGhqYXNnZGFzamhkZ3NhIiwiZXhwaXJhdGlvbk1vbnRoIjozLCJleHBpcmF0aW9uWWVhciI6MjAzMCwiY2FyZE51bWJlciI6InNwdF9qaGFnZGtqYXNoZGtqc2FoZHNhaGRramFzZGhqaGFzIiwiM2RzIjp7ImVjaUZsYWciOiIwNSIsInZlcnNpb24iOiIyLjEuMCIsImNhdnYiOiIzcTIrNzhyK3VyN2VyYjd2eXY2NnZ2Ly8vLzg9IiwidHJhbnNhY3Rpb25JZCI6Ijk3OGJiYTI4LTczZmYtNDUxMy1hZDg4LTI0MDI3MzYyZjg5OCIsInhpZCI6IjQ0YjdhOTRlLTRmNjYtNGI1NS1hMzZkLTUwYWYxOTliYzEzMiJ9fQ="
+			},
+			"UserAccessTokenHeader": {
+				"name": "x-user-access-token",
+				"in": "header",
+				"description": "User Access provided by CRG",
+				"required": true,
+				"schema": {
+					"type": "string",
+					"minLength": 1
+				},
+				"example": "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2Mzk4NzUwNTMuODcsInVzZXJJZCI6MTE4NSwiaWF0IjoxNjM4ODc1MDU0fQ.a0_yIhmF4TNx5m3OdD-R0pmCjAhSXHmd2vy7Nglxugd0l-uowTxOZsLBIQTbVLIglfXwFfAYi48OJT48bRXZZQ"
+			},
+			"ApiKeyHeader": {
+				"name": "x-spt-api-key",
+				"in": "header",
+				"description": "API key to access the service",
+				"required": true,
+				"schema": {
+					"type": "string",
+					"minLength": 1
+				},
+				"example": "key_4296499424554591aa98049da2ac8cbf"
+			},
+			"ApiKeyInPath": {
+				"name": "apiKey",
+				"description": "API key",
+				"in": "path",
+				"schema": {
+					"type": "string"
+				},
+				"required": true
+			}
+		}
+	}
+}

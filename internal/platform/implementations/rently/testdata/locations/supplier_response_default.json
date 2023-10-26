@@ -1,0 +1,106 @@
+[
+	{
+		"attentionSchedule": {
+			"id": 1,
+			"schedule": {
+				"monday": [],
+				"tuesday": [],
+				"wednesday": [],
+				"thursday": [],
+				"friday": [],
+				"saturday": [],
+				"sunday": [],
+				"holiday": []
+			},
+			"timezoneId": "Argentina Standard Time",
+			"timezoneUTCOffset": "-03:00:00",
+			"gapForBookingTime": 15,
+			"gap": 0
+		},
+		"id": 169,
+		"country": "AR",
+		"city": "Salta 2",
+		"phone": "+54 11 3582-9237",
+		"email": "bookings@streetrentacar2.com",
+		"supplierId": 9,
+		"address": null,
+		"address2": null,
+		"longitude": -65.405886,
+		"latitude": -24.790267,
+		"type": "Airport",
+		"serviceType": "Walking",
+		"iata": null
+	},
+	{
+		"attentionSchedule": {
+			"id": 1,
+			"schedule": {
+				"monday": [
+					{
+						"openedFrom": "08:00:00",
+						"openedTo": "20:00:00"
+					}
+				],
+				"tuesday": [
+					{
+						"openedFrom": "08:00:00",
+						"openedTo": "20:00:00"
+					}
+				],
+				"wednesday": [
+					{
+						"openedFrom": "08:00:00",
+						"openedTo": "20:00:00"
+					}
+				],
+				"thursday": [
+					{
+						"openedFrom": "08:00:00",
+						"openedTo": "20:00:00"
+					}
+				],
+				"friday": [
+					{
+						"openedFrom": "08:00:00",
+						"openedTo": "20:00:00"
+					}
+				],
+				"saturday": [
+					{
+						"openedFrom": "08:00:00",
+						"openedTo": "20:00:00"
+					}
+				],
+				"sunday": [
+					{
+						"openedFrom": "08:00:00",
+						"openedTo": "20:00:00"
+					}
+				],
+				"holiday": [
+					{
+						"openedFrom": "08:00:00",
+						"openedTo": "20:00:00"
+					}
+				]
+			},
+			"timezoneId": "Argentina Standard Time",
+			"timezoneUTCOffset": "-03:00:00",
+			"gapForBookingTime": 15,
+			"gap": 0
+		},
+		"id": 169,
+		"country": "AR",
+		"city": "Salta 3",
+		"phone": "+54 11 3582-9237",
+		"email": "bookings@streetrentacar3.com",
+		"supplierId": 9,
+		"address": null,
+		"address2": null,
+		"longitude": -65.405886,
+		"latitude": -24.790267,
+		"type": "Airport",
+		"serviceType": "Walking",
+		"iata": null
+	}
+]

@@ -1,0 +1,86 @@
+{
+	"pickUp": {
+		"code": "ORK",
+		"dateTime": "2023-07-12T10:00:00Z",
+		"timeZone": "Europe/Dublin",
+		"country": "IE"
+	},
+	"dropOff": {
+		"code": "ORK",
+		"dateTime": "2023-07-19T10:00:00Z",
+		"timeZone": "Europe/Dublin",
+		"country": "IE"
+	},
+	"rentalDays": 7,
+	"contract": {
+		"currency": "USD",
+		"supplierId": 76,
+		"contractId": "45076",
+		"paymentType": 0,
+		"markUp": 25
+	},
+	"booking": {
+		"pricelistId": 1209956
+	},
+	"vehicleClass": "MBMN",
+	"supplierRateReference": "{\"fromRates\":\"QXVLHI6PJQ70884-6301\",\"estimatedTotalAmount\":\"346.18\",\"estimatedTotalAmountCurrency\":\"EUR\"}",
+	"brokerReference": "28522117",
+	"reservNumber": "28522117",
+	"carSupplierPaymentPrice": {
+		"amount": 282.1,
+		"currency": "EUR"
+	},
+	"carSupplierPaymentPriceInPaymentCurrency": {
+		"amount": 309.40125756640015,
+		"currency": "USD"
+	},
+	"bookingDateTime": "2023-05-02T07:14:52Z",
+	"flightNumber": "",
+	"comments": {
+		"customer": ""
+	},
+	"customer": {
+		"title": "Mr",
+		"firstName": "TestJan",
+		"lastName": "TestGateway",
+		"residenceCountry": "US",
+		"age": 30,
+		"phone": "",
+		"email": "res@rentcarrez.com"
+	},
+	"extrasAndFees": [],
+	"moduleId": 260,
+	"configuration": {
+		"supplierApiUrl": "{{supplierApiUrl}}",
+		"vendorCode": "ZE",
+		"vendorCodeImport": "ZE",
+		"vehicleWhereAtMapping": {
+			"LAP": 14,
+			"LDT": 7,
+			"LAM": 4,
+			"LHT": 5
+		},
+		"maxResponses": "25",
+		"sendVoucher": true,
+		"taxExclCoverageCountries": [
+			"NO",
+			"SE",
+			"DK"
+		],
+		"extraMappingForImport": {
+			"CSI": 7,
+			"NEV": 13,
+			"BST": 9,
+			"CST": 8
+		},
+		"sendBookingDataForRates": true,
+		"vc": "C1R18R5E14T",
+		"vn": "X411",
+		"cp": "B3LP"
+	},
+	"timeouts": {
+		"default": 8000,
+		"booking": 60000
+	},
+	"language": "en-gb"
+}

@@ -1,0 +1,5 @@
+<BookingStatusRQ version="1.1">
+	<Credentials username="test-user" password="test-password"></Credentials>
+	<Booking id="K48730916F3"></Booking>
+	<Email>dumb@www.com</Email>
+</BookingStatusRQ>

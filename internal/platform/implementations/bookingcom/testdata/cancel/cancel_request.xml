@@ -1,0 +1,6 @@
+<CancelBookingRQ>
+	<Credentials username="test-user" password="test-password"></Credentials>
+	<Email>dumb@www.com</Email>
+	<Reason>Cancel reason code is a 4</Reason>
+	<Booking id="K48730916F3"></Booking>
+</CancelBookingRQ>

@@ -1,0 +1,97 @@
+{
+	"id": "JC000027-MIA",
+	"externalSystemBookingId": "1234567890",
+	"price": 53.6,
+	"days": 10,
+	"status": "Quoted",
+	"createdOn": "2022-01-08 11:32:08",
+	"fromDate": "2022-01-10 11:00",
+	"toDate": "2022-01-20 11:00",
+	"currency": "USD",
+	"deliveryPlace": {
+		"id": 1,
+		"country": "US",
+		"city": "Miami",
+		"phone": "+54 11 3582-9237",
+		"email": "reservas@streetrentacar.com",
+		"supplierId": 9,
+		"address": "Miami International Airport",
+		"address2": "string",
+		"longitude": -80.27617,
+		"latitude": 25.796936,
+		"type": "Office",
+		"serviceType": "Walking",
+		"iata": "string"
+	},
+	"dropoffPlace": {
+		"id": 1,
+		"country": "US",
+		"city": "Miami",
+		"phone": "+54 11 3582-9237",
+		"email": "reservas@streetrentacar.com",
+		"supplierId": 9,
+		"address": "Miami International Airport",
+		"address2": "string",
+		"longitude": -80.27617,
+		"latitude": 25.796936,
+		"type": "Office",
+		"serviceType": "Walking",
+		"iata": "string"
+	},
+	"priceItems": [
+		{
+		"id": 1,
+		"isBookingPrice": false,
+		"description": "(1) GPS x 2 days",
+		"price": 10,
+		"type": "Booking",
+		"typeId": 1,
+		"unitPrice": 5,
+		"quantity": 2
+		}
+	],
+	"model": {
+		"id": 87,
+		"name": "Aygo",
+		"description": "Great choice for small family's",
+		"sipp": "EDMV",
+		"brand": "Toyota",
+		"category": {
+		"id": 1,
+		"order": 0,
+		"name": "Small"
+		},
+		"passangers": 4,
+		"doors": 5,
+		"transmissionType": "Manual",
+		"bigLuggage": 3,
+		"smallLuggage": 3,
+		"hasAirCondition": true,
+		"imagePath": "https://rently.blob.core.windows.net/sterling/CarModel/02984b25-ef7e-4713-8406-ecd97afbc0e7.png",
+		"franchise": 675,
+		"franchiseDamage": 675,
+		"franchiseRollover": 675,
+		"franchiseTheft": 675
+	},
+	"category": {
+		"id": 1,
+		"order": 0,
+		"name": "Small"
+	},
+	"additionals": [
+		{
+		"additional": {
+			"name": "GPS",
+			"description": "Navigation system for vehicles",
+			"imagePath": "https://rently.blob.core.windows.net/hertz/Additional/8ac99d2e-db50-45bb-8b2b-0ed09067855a.png",
+			"type": "Additional | Insurace",
+			"id": 1
+		},
+		"quantity": 2
+		}
+	],
+	"franchise": 675,
+	"franchiseDamage": 675,
+	"franchiseRollover": 675,
+	"franchiseTheft": 675
+}

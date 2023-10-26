@@ -1,0 +1,40 @@
+<OTA_VehModifyRQ xmlns="http://www.opentravel.org/OTA/2003/05" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opentravel.org/OTA/2003/05 OTA_VehResRS.xsd" Version="1.008">
+	<POS>
+		<Source ISOCountry="US" AgentDutyCode="T20C3I9N14T">
+			<RequestorID Type="4" ID="T007">
+				<CompanyName Code="CP" CodeContext="D4D6"></CompanyName>
+			</RequestorID>
+		</Source>
+		<Source>
+			<RequestorID Type="8" ID="ZT"></RequestorID>
+		</Source>
+		<Source>
+			<RequestorID Type="5" ID="00295632"></RequestorID>
+		</Source>
+		<Source>
+			<RequestorID Type="29" ID="HZ00295632"></RequestorID>
+		</Source>
+	</POS>
+	<VehModifyRQCore Status="Confirmed" ModifyType="Quote">
+		<UniqueID Type="14" ID="bookingReference"></UniqueID>
+		<VehRentalCore PickUpDateTime="2023-08-03T21:00:00" ReturnDateTime="2023-08-14T07:00:00">
+			<PickUpLocation LocationCode="SEA"></PickUpLocation>
+		</VehRentalCore>
+		<Customer>
+			<Primary>
+				<PersonName>
+					<GivenName>FirstName</GivenName>
+					<Surname>LastName</Surname>
+				</PersonName>
+				<Telephone PhoneNumber="+372" PhoneTechType="1"></Telephone>
+				<Email>email@example.com</Email>
+			</Primary>
+		</Customer>
+		<VehPref Code="ECAR" CodeContext="SIPP"></VehPref>
+	</VehModifyRQCore>
+	<VehModifyRQInfo>
+		<RentalPaymentPref>
+			<Voucher SeriesCode="112233"></Voucher>
+		</RentalPaymentPref>
+	</VehModifyRQInfo>
+</OTA_VehModifyRQ>

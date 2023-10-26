@@ -1,0 +1,169 @@
+{
+	"errors": [],
+	"vehicles": [
+		{
+			"class": "A",
+			"extrasAndFees": [
+				{
+					"code": "CollisionDamage",
+					"excess": {
+						"amount": 1000.00,
+						"currency": "EUR"
+					},
+					"includedInRate": true,
+					"mandatory": true,
+					"name": "Collision damage",
+					"payLocal": true,
+					"price": {
+						"amount": 0.00,
+						"currency": "EUR"
+					},
+					"type": "VCT",
+					"unit": "per rental"
+				},
+				{
+					"code": "SCDW",
+					"excess": {
+						"amount": 0.00,
+						"currency": "EUR"
+					},
+					"includedInRate": false,
+					"mandatory": false,
+					"maxQuantity": 1,
+					"name": "SuperCDW (Damage Coverage)",
+					"payLocal": true,
+					"price": {
+						"amount": 19.00,
+						"currency": "EUR"
+					},
+					"type": "VCT",
+					"unit": "per rental"
+				},
+				{
+					"code": "ESP",
+					"includedInRate": false,
+					"mandatory": false,
+					"maxQuantity": 1,
+					"name": "Cross Border Fee (Spain)",
+					"payLocal": true,
+					"price": {
+						"amount": 57.00,
+						"currency": "EUR"
+					},
+					"type": "VCP",
+					"unit": "per rental"
+				},
+				{
+					"code": "COND",
+					"includedInRate": false,
+					"mandatory": false,
+					"maxQuantity": 9,
+					"name": "Extra Driver",
+					"payLocal": true,
+					"price": {
+						"amount": 5.50,
+						"currency": "EUR"
+					},
+					"type": "EQP",
+					"unit": "per rental"
+				}
+			],
+			"mileage": {
+				"unlimited": true
+			},
+			"name": "Fiat Panda 1.0 Hybrid City Life",
+			"price": {
+				"amount": 50.00,
+				"currency": "EUR"
+			},
+			"status": "AVAILABLE",
+			"supplierRateReference": "{\"pickupStation\":\"MAN\",\"pickupDate\":\"2023-09-01 12:30:00\",\"dropOffStation\":\"MAN\",\"dropOffDate\":\"2023-09-02 12:30:00\",\"group\":\"A\"}"
+		},
+		{
+			"acrissCode": "MBMR",
+			"bigSuitcases": 2,
+			"class": "A",
+			"doors": 4,
+			"extrasAndFees": [
+				{
+					"code": "CollisionDamage",
+					"excess": {
+						"amount": 1000.00,
+						"currency": "EUR"
+					},
+					"includedInRate": true,
+					"mandatory": true,
+					"name": "Collision damage",
+					"payLocal": true,
+					"price": {
+						"amount": 0.00,
+						"currency": "EUR"
+					},
+					"type": "VCT",
+					"unit": "per rental"
+				},
+				{
+					"code": "SCDW",
+					"excess": {
+						"amount": 0.00,
+						"currency": "EUR"
+					},
+					"includedInRate": false,
+					"mandatory": false,
+					"maxQuantity": 1,
+					"name": "SuperCDW (Damage Coverage)",
+					"payLocal": true,
+					"price": {
+						"amount": 9.00,
+						"currency": "EUR"
+					},
+					"type": "VCT",
+					"unit": "per rental"
+				},
+				{
+					"code": "ESP",
+					"includedInRate": false,
+					"mandatory": false,
+					"maxQuantity": 1,
+					"name": "Cross Border Fee (Spain)",
+					"payLocal": true,
+					"price": {
+						"amount": 50.00,
+						"currency": "EUR"
+					},
+					"type": "VCP",
+					"unit": "per rental"
+				},
+				{
+					"code": "COND",
+					"includedInRate": false,
+					"mandatory": false,
+					"maxQuantity": 9,
+					"name": "Extra Driver",
+					"payLocal": true,
+					"price": {
+						"amount": 5.00,
+						"currency": "EUR"
+					},
+					"type": "EQP",
+					"unit": "per rental"
+				}
+			],
+			"fuelType": "Petrol",
+			"hasAirco": true,
+			"mileage": {
+				"includedDistance": "10",
+				"unlimited": false
+			},
+			"name": "Fiat Panda 1.0 Hybrid City Life 2",
+			"price": {
+				"amount": 50.00,
+				"currency": "EUR"
+			},
+			"seats": 5,
+			"status": "AVAILABLE",
+			"supplierRateReference": "{\"pickupStation\":\"MAN\",\"pickupDate\":\"2023-09-01 12:30:00\",\"dropOffStation\":\"MAN\",\"dropOffDate\":\"2023-09-02 12:30:00\",\"group\":\"A\"}",
+			"transmissionType": "Automatic"
+		}
+	]
+}

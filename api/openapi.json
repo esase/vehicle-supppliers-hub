@@ -1,0 +1,2251 @@
+{
+	"openapi": "3.0.0",
+	"info": {
+		"title": "supplier-hub",
+		"version": "1.0.0"
+	},
+	"paths": {
+		"/{platform}/rates": {
+			"post": {
+				"tags": [
+					"platform"
+				],
+				"summary": "Returns available vehicle",
+				"operationId": "getRates",
+				"description": "Returns available vehicle",
+				"parameters": [{
+					"$ref": "#/components/parameters/requiredPlatformInPath"
+				}],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RatesRequestParams"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Available vehicles",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RatesResponse"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/{platform}/booking": {
+			"post": {
+				"tags": [
+					"platform"
+				],
+				"summary": "Books the vehicle",
+				"operationId": "createBooking",
+				"description": "Creates a booking",
+				"parameters": [{
+					"$ref": "#/components/parameters/requiredPlatformInPath"
+				}],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/BookingRequestParams"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Booking success",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BookingResponse"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/{platform}/booking-status": {
+			"post": {
+				"tags": [
+					"platform"
+				],
+				"summary": "Check the booking status",
+				"operationId": "checkBookingStatus",
+				"description": "Checks a booking status",
+				"parameters": [{
+					"$ref": "#/components/parameters/requiredPlatformInPath"
+				}],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/BookingStatusRequestParams"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Booking status",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BookingStatusResponse"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/{platform}/modify": {
+			"post": {
+				"tags": [
+					"platform"
+				],
+				"summary": "Modifies the booking",
+				"operationId": "modifyBooking",
+				"description": "Modify booking",
+				"parameters": [{
+					"$ref": "#/components/parameters/requiredPlatformInPath"
+				}],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ModifyRequestParams"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Modify response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ModifyResponse"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/{platform}/cancel": {
+			"post": {
+				"tags": [
+					"platform"
+				],
+				"summary": "Cancel the booking",
+				"operationId": "cancelBooking",
+				"description": "Cancel existing booking",
+				"parameters": [{
+					"$ref": "#/components/parameters/requiredPlatformInPath"
+				}],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CancelRequestParams"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Successful cancellation",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CancelResponse"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/{platform}/locations": {
+			"post": {
+				"tags": [
+					"platform"
+				],
+				"summary": "Find locations",
+				"operationId": "getLocations",
+				"description": "Fetch all supplier's locations",
+				"parameters": [{
+					"$ref": "#/components/parameters/requiredPlatformInPath"
+				}],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/LocationsRequestParams"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Locations",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/LocationsResponse"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/status": {
+			"get": {
+				"tags": [
+					"system"
+				],
+				"summary": "Get status",
+				"operationId": "getStatus",
+				"responses": {
+					"200": {
+						"description": "Status",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"status": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/openapi.json": {
+			"get": {
+				"tags": [
+					"system"
+				],
+				"summary": "Get OpenAPI Spec",
+				"operationId": "getOpenApiSpec",
+				"responses": {
+					"200": {
+						"description": "OpenAPI Spec",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object"
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"schemas": {
+			"ModifyRequestParams": {
+				"required": [
+					"pickUp",
+					"dropOff",
+					"contract",
+					"vehicleClass",
+					"supplierRateReference",
+					"supplierBookingReference",
+					"reservNumber",
+					"brokerReference",
+					"customer",
+					"moduleId",
+					"configuration",
+					"timeouts"
+				],
+				"properties": {
+					"pickUp": {
+						"$ref": "#/components/schemas/RequestBranchWithTimeZone"
+					},
+					"dropOff": {
+						"$ref": "#/components/schemas/RequestBranchWithTimeZone"
+					},
+					"rentalDays": {
+						"type": "integer",
+						"description": "Rental days"
+					},
+					"contract": {
+						"$ref": "#/components/schemas/Contract"
+					},
+					"vehicleClass": {
+						"type": "string",
+						"description": "Vehicle class in supplier system"
+					},
+					"supplierRateReference": {
+						"type": "string",
+						"description": "Supplier rate reference from rates request"
+					},
+					"supplierBookingReference": {
+						"type": "string",
+						"description": "Supplier booking reference"
+					},
+					"brokerReference": {
+						"type": "string",
+						"description": "Car Rental Gateway booking/broker reference"
+					},
+					"reservNumber": {
+						"type": "string",
+						"description": "Car Rental Gateway booking reservation number"
+					},
+					"flightNumber": {
+						"type": "string",
+						"description": "Flight number"
+					},
+					"onlineFeeMap": {
+						"type": "object",
+						"description": "Online fee map"
+					},
+					"flightNo": {
+						"type": "string",
+						"description": "Flight number"
+					},
+					"comments": {
+						"type": "object",
+						"properties": {
+							"customer": {
+								"type": "string",
+								"description": "A message from customer to supplier"
+							}
+						}
+					},
+					"airlineCode": {
+						"type": "string"
+					},
+					"customer": {
+						"$ref": "#/components/schemas/Customer"
+					},
+					"extrasAndFees": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/BookingExtraOrFee"
+						}
+					},
+					"moduleId": {
+						"type": "integer",
+						"description": "Module ID"
+					},
+					"configuration": {
+						"oneOf": [{
+								"$ref": "#/components/schemas/HertzConfiguration"
+							}, {
+								"$ref": "#/components/schemas/ProfitMaxDHTConfiguration"
+							}, {
+								"$ref": "#/components/schemas/BookingComConfiguration"
+							},{
+								"$ref": "#/components/schemas/AnyRentConfiguration"
+							}, {
+								"$ref": "#/components/schemas/RentlyConfiguration"
+							}]
+					},
+					"timeouts": {
+						"$ref": "#/components/schemas/Timeouts"
+					},
+					"supplierSpecificInformation": {
+						"$ref": "#/components/schemas/SupplierSpecificInformation"
+					}
+				}
+			},
+			"ModifyResponse": {
+				"type": "object",
+				"properties": {
+					"supplierBookingReference": {
+						"type": "string",
+						"description": "Supplier booking reference"
+					},
+					"status": {
+						"type": "string",
+						"enum": [
+							"OK",
+							"FAILED",
+							"PENDING"
+						],
+						"description": "Booking status"
+					},
+					"supplierData": {
+						"type": "object",
+						"description": "Supplier specific data about the booking as JSON string. This data is stored with booking and passed as configuration parameters for cancel, modify and bookingstatus requests"
+					},
+					"supplierRequests": {
+						"$ref": "#/components/schemas/SupplierRequests"
+					},
+					"errors": {
+						"$ref": "#/components/schemas/SupplierResponseErrors"
+					}
+				}
+			},
+			"RatesRequestParams": {
+				"type": "object",
+				"description": "Rates request object",
+				"required": [
+					"pickUp",
+					"dropOff",
+					"rentalDays",
+					"contract",
+					"taxRate",
+					"residenceCountry",
+					"age",
+					"moduleId",
+					"configuration",
+					"timeouts"
+				],
+				"properties": {
+					"pickUp": {
+						"$ref": "#/components/schemas/RequestBranch"
+					},
+					"dropOff": {
+						"$ref": "#/components/schemas/RequestBranch"
+					},
+					"rentalDays": {
+						"type": "integer",
+						"description": "Number of rental days"
+					},
+					"onlineExtras": {
+						"type": "boolean"
+					},
+					"onlineFeeMap": {
+						"type": "object",
+						"description": "Online fee map"
+					},
+					"contract": {
+						"$ref": "#/components/schemas/Contract"
+					},
+					"taxRate": {
+						"type": "number"
+					},
+					"residenceCountry": {
+						"description": "Country ISO code of branch",
+						"type": "string",
+						"pattern": "^[A-Z]{2}$",
+						"example": "GB"
+					},
+					"age": {
+						"type": "integer",
+						"description": "Driver age"
+					},
+					"moduleId": {
+						"type": "integer",
+						"description": "Module ID"
+					},
+					"ageRanges": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/AgeRange"
+						}
+					},
+					"iata": {
+						"type": "string",
+						"description": "pickUp and/or dropOff location iata code"
+					},
+					"configuration": {
+						"anyOf": [{
+							"$ref": "#/components/schemas/HertzConfiguration"
+						}, {
+							"$ref": "#/components/schemas/ProfitMaxDHTConfiguration"
+						}, {
+							"$ref": "#/components/schemas/BookingComConfiguration"
+						},{
+							"$ref": "#/components/schemas/AnyRentConfiguration"
+						}, {
+							"$ref": "#/components/schemas/RentlyConfiguration"
+						}]
+					},
+					"timeouts": {
+						"$ref": "#/components/schemas/Timeouts"
+					},
+					"driverAgeRange": {
+						"type": "array",
+						"description": "Driver age range array of objects",
+						"items": {
+							"type": "object",
+							"properties": {
+								"code": {
+									"type": "string"
+								},
+								"otaCode": {
+									"type": "string"
+								},
+								"min": {
+									"type": "number"
+								},
+								"max": {
+									"type": "number"
+								},
+								"classes": {
+									"type": "object"
+								}
+							}
+						}
+					},
+					"booking": {
+						"$ref": "#/components/schemas/ExistingBooking"
+					},
+					"branchExtras": {
+						"type": "array",
+						"description": "Array of request's pickup branch extra OTA codes that is optionally submitted when supplier needs this data for the request",
+						"items": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"BookingRequestParams": {
+				"required": [
+					"pickUp",
+					"dropOff",
+					"contract",
+					"vehicleClass",
+					"supplierRateReference",
+					"reservNumber",
+					"brokerReference",
+					"customer",
+					"moduleId",
+					"configuration",
+					"timeouts"
+				],
+				"properties": {
+					"pickUp": {
+						"$ref": "#/components/schemas/RequestBranchWithTimeZone"
+					},
+					"dropOff": {
+						"$ref": "#/components/schemas/RequestBranchWithTimeZone"
+					},
+					"rentalDays": {
+						"type": "integer",
+						"description": "Rental days"
+					},
+					"contract": {
+						"$ref": "#/components/schemas/Contract"
+					},
+					"vehicleClass": {
+						"type": "string",
+						"description": "Vehicle class in supplier system"
+					},
+					"supplierRateReference": {
+						"type": "string",
+						"description": "Supplier rate reference from rates request"
+					},
+					"brokerReference": {
+						"type": "string",
+						"description": "Car Rental Gateway booking/broker reference"
+					},
+					"reservNumber": {
+						"type": "string",
+						"description": "Car Rental Gateway booking reservation number"
+					},
+					"carSupplierPaymentPrice": {
+						"$ref": "#/components/schemas/PriceAmount"
+					},
+					"carSupplierPaymentPriceInPaymentCurrency": {
+						"$ref": "#/components/schemas/PriceAmount"
+					},
+					"bookingDateTime": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"flightNumber": {
+						"type": "string",
+						"description": "Flight number"
+					},
+					"flightNo": {
+						"type": "string",
+						"description": "Flight number"
+					},
+					"comments": {
+						"type": "object",
+						"properties": {
+							"customer": {
+								"type": "string",
+								"description": "A message from customer to supplier"
+							}
+						}
+					},
+					"airlineCode": {
+						"type": "string"
+					},
+					"customer": {
+						"$ref": "#/components/schemas/Customer"
+					},
+					"onlineFeeMap": {
+						"type": "object",
+						"description": "Online fee map"
+					},
+					"extrasAndFees": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/BookingExtraOrFee"
+						}
+					},
+					"moduleId": {
+						"type": "integer",
+						"description": "Module ID"
+					},
+					"configuration": {
+						"anyOf": [{
+							"$ref": "#/components/schemas/HertzConfiguration"
+						}, {
+							"$ref": "#/components/schemas/ProfitMaxDHTConfiguration"
+						},{
+							"$ref": "#/components/schemas/BookingComConfiguration"
+						},{
+							"$ref": "#/components/schemas/AnyRentConfiguration"
+						}, {
+							"$ref": "#/components/schemas/RentlyConfiguration"
+						}]
+					},
+					"timeouts": {
+						"$ref": "#/components/schemas/Timeouts"
+					},
+					"supplierSpecificInformation": {
+						"$ref": "#/components/schemas/SupplierSpecificInformation"
+					},
+					"supplierPassthrough": {
+						"$ref": "#/components/schemas/SupplierPassthrough"
+					}
+				}
+			},
+			"BookingExtraOrFee": {
+				"type": "object",
+				"required": [
+					"code",
+					"type"
+				],
+				"properties": {
+					"code": {
+						"type": "string",
+						"description": "Supplier extra code"
+					},
+					"type": {
+						"type": "string",
+						"enum": [
+							"Extra",
+							"Fee"
+						],
+						"description": "Type"
+					},
+					"isIncluded": {
+						"type": "boolean",
+						"description": "Is included in rate"
+					},
+					"isMandatory": {
+						"type": "boolean",
+						"description": "Is mandatory"
+					},
+					"quantity": {
+						"type": "integer",
+						"description": "Quantity"
+					},
+					"availability": {
+						"$ref": "#/components/schemas/ExtraAvailability"
+					}
+				}
+			},
+			"SupplierSpecificInformation": {
+				"type": "object",
+				"description": "For carrying supplier specific information",
+				"properties": {
+					"hertzBillingNumber": {
+						"type": "string",
+						"description": "Hertz specific billing number that is sent with booking request"
+					}
+				}
+			},
+			"SupplierPassthrough": {
+				"required": [
+					"payment"
+				],
+				"properties": {
+					"payment": {
+						"$ref": "#/components/schemas/PassthroughPayment"
+					}
+				}
+			},
+			"PassthroughPayment": {
+				"required": [
+					"method",
+					"sptToken"
+				],
+				"properties": {
+					"method": {
+						"type": "string",
+						"description": "Payment method"
+					},
+					"sptToken": {
+						"type": "string",
+						"description": "Spt token"
+					}
+				}
+			},
+			"CancelRequestParams":  {
+				"required": [
+					"pickUp",
+					"supplierBookingReference",
+					"reservNumber",
+					"brokerReference",
+					"contact",
+					"moduleId",
+					"configuration",
+					"timeouts"
+				],
+				"properties": {
+					"pickUp": {
+						"$ref": "#/components/schemas/RequestBranch"
+					},
+					"supplierBookingReference": {
+						"type": "string",
+						"description": "Supplier booking reference"
+					},
+					"brokerReference": {
+						"type": "string",
+						"description": "Car Rental Gateway booking/broker reference"
+					},
+					"reservNumber": {
+						"type": "string",
+						"description": "Car Rental Gateway booking reservation number"
+					},
+					"cancelReason": {
+						"type": "integer",
+						"description": "Cancel reason (value in range 2 to 15)"
+					},
+					"bookingDateTime": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"moduleId": {
+						"type": "integer",
+						"description": "Module ID"
+					},
+					"contact": {
+						"$ref": "#/components/schemas/Contact"
+					},
+					"configuration": {
+						"anyOf": [{
+							"$ref": "#/components/schemas/HertzConfiguration"
+						}, {
+							"$ref": "#/components/schemas/ProfitMaxDHTConfiguration"
+						},{
+							"$ref": "#/components/schemas/BookingComConfiguration"
+						},{
+							"$ref": "#/components/schemas/AnyRentConfiguration"
+						}, {
+							"$ref": "#/components/schemas/RentlyConfiguration"
+						}]
+					},
+					"timeouts": {
+						"$ref": "#/components/schemas/Timeouts"
+					}
+				}
+			},
+			"CancelResponse": {
+				"type": "object",
+				"properties": {
+					"status": {
+						"type": "string",
+						"enum": [
+							"OK",
+							"FAILED"
+						],
+						"description": "Was the cancellation successful."
+					},
+					"supplierRequests": {
+						"$ref": "#/components/schemas/SupplierRequests"
+					},
+					"errors": {
+						"$ref": "#/components/schemas/SupplierResponseErrors"
+					}
+				}
+			},
+			"ExtraAvailability": {
+				"type": "object",
+				"required": [
+					"available"
+				],
+				"properties": {
+					"available": {
+						"type": "boolean",
+						"description": "is the extra available"
+					},
+					"errorCode": {
+						"type": "string",
+						"description": "Supplier specific code indicating why the extra is not available"
+					},
+					"errorMessage": {
+						"type": "string",
+						"description": "Supplier specific message indicating why the extra is not available"
+					}
+				}
+			},
+			"RequestBranchWithTimeZone": {
+				"type": "object",
+				"required": [
+					"code",
+					"country",
+					"dateTime"
+				],
+				"properties": {
+					"code": {
+						"type": "string",
+						"description": "Branch code"
+					},
+					"country": {
+						"description": "Country ISO code of branch",
+						"type": "string",
+						"pattern": "^[A-Z]{2}$",
+						"example": "GB"
+					},
+					"timeZone": {
+						"description": "TimeZone of dateTime",
+						"type": "string"
+					},
+					"dateTime": {
+						"type": "string",
+						"format": "date-time"
+					}
+				}
+			},
+			"ExistingBooking": {
+				"type": "object",
+				"required": [
+					"supplierBookingReference",
+					"bookingDateTime"
+				],
+				"properties": {
+					"supplierBookingReference": {
+						"type": "string",
+						"description": "Supplier booking reference"
+					},
+					"bookingDateTime": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"firstName": {
+						"type": "string"
+					},
+					"lastName": {
+						"type": "string"
+					},
+					"phone": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"reservNumber": {
+						"type": "string",
+						"description": "Gateway reserv number"
+					}
+				}
+			},
+			"Customer": {
+				"type": "object",
+				"required": [
+					"firstName",
+					"lastName",
+					"residenceCountry",
+					"phone",
+					"email",
+					"age"
+				],
+				"properties": {
+					"residenceCountry": {
+						"type": "string",
+						"description": "Driver residence as country ISO code"
+					},
+					"age": {
+						"type": "integer",
+						"description": "Driver age"
+					},
+					"firstName": {
+						"type": "string",
+						"description": "Customer first name"
+					},
+					"lastName": {
+						"type": "string",
+						"description": "Customer last name"
+					},
+					"title": {
+						"type": "string",
+						"description": "Title"
+					},
+					"phone": {
+						"type": "string",
+						"description": "Customer phone"
+					},
+					"email": {
+						"type": "string",
+						"description": "Customer e-mail",
+						"format": "email"
+					}
+				}
+			},
+			"Contract": {
+				"type": "object",
+				"required": [
+					"currency",
+					"supplierId",
+					"paymentType"
+				],
+				"properties": {
+					"currency": {
+						"description": "Currency",
+						"type": "string",
+						"pattern": "^[A-Z]{3}$"
+					},
+					"supplierId": {
+						"type": "integer",
+						"description": "Supplier id in car rental gateway"
+					},
+					"paymentType": {
+						"type": "integer",
+						"minimum": 0,
+						"maximum": 1,
+						"description": "Payment type. Allowed values: 0 - Full prepay, 1 - partial prepay"
+					},
+					"markUp": {
+						"type": "number"
+					},
+					"returnXmlProfit": {
+						"type": "boolean"
+					},
+					"contractId": {
+						"type": "string",
+						"description": "Contract id in car rental gateway"
+					}
+				}
+			},
+			"AgeRange": {
+				"type": "object",
+				"properties": {
+					"code": {
+						"type": "string"
+					},
+					"otaCode": {
+						"type": "integer"
+					},
+					"min": {
+						"type": "integer"
+					},
+					"max": {
+						"type": "integer"
+					},
+					"classes": {
+						"type": "object"
+					}
+				}
+			},
+			"RatesResponse": {
+				"type": "object",
+				"required": [
+					"vehicles",
+					"branchVehicleWhereAt",
+					"specialInstructions"
+				],
+				"properties": {
+					"vehicles": {
+						"type": "array",
+						"description": "Available vehicles for specified search parameters",
+						"items": {
+							"$ref": "#/components/schemas/Vehicle"
+						}
+					},
+					"branchVehicleWhereAt": {
+						"type": "string",
+						"description": "Vehicle Where At Facility OTA code. Misu updates 'vehicleWhereAt' when parsing rates",
+						"x-omitempty": true
+					},
+					"specialInstructions": {
+						"type": "string",
+						"description": "Branch specific special instructions. Misu updates branch 'specialInstructions' property when parsing rates",
+						"x-omitempty": true
+					},
+					"supplierRequests": {
+						"$ref": "#/components/schemas/SupplierRequests"
+					},
+					"errors": {
+						"$ref": "#/components/schemas/SupplierResponseErrors"
+					}
+				}
+			},
+			"BookingResponse": {
+				"type": "object",
+				"required": [
+					"status"
+				],
+				"properties": {
+					"supplierBookingReference": {
+						"type": "string",
+						"description": "Supplier booking reference"
+					},
+					"status": {
+						"type": "string",
+						"enum": [
+							"OK",
+							"FAILED",
+							"PENDING"
+						],
+						"description": "Booking status"
+					},
+					"supplierData": {
+						"type": "object",
+						"description": "Supplier specific data about the booking as JSON string. This data is stored with booking and passed as configruation parameters for cancel, modify and bookingstatus requests"
+					},
+					"supplierRequests": {
+						"$ref": "#/components/schemas/SupplierRequests"
+					},
+					"errors": {
+						"$ref": "#/components/schemas/SupplierResponseErrors"
+					}
+				}
+			},
+			"Vehicle": {
+				"type": "object",
+				"required": [
+					"class",
+					"name",
+					"price",
+					"status"
+				],
+				"properties": {
+					"class": {
+						"type": "string",
+						"description": "Vehicle class in supplier system"
+					},
+					"name": {
+						"type": "string",
+						"description": "Vehicle name"
+					},
+					"price": {
+						"$ref": "#/components/schemas/PriceAmount"
+					},
+					"profit": {
+						"type": "number",
+						"description": "Profit"
+					},
+					"excess": {
+						"$ref": "#/components/schemas/PriceAmount"
+					},
+					"acrissCode": {
+						"type": "string",
+						"description": "Acriss code of the vehicle"
+					},
+					"hasAirco": {
+						"type": "boolean",
+						"description": "Does the vehicle have air conditioner"
+					},
+					"hasABS": {
+						"type": "boolean",
+						"description": "Does the vehicle have ABS"
+					},
+					"hasGPS": {
+						"type": "boolean",
+						"description": "Does the vehicle have GPS"
+					},
+					"seats": {
+						"type": "integer",
+						"description": "Number of seats in the vehicle"
+					},
+					"doors": {
+						"type": "integer",
+						"description": "Number of doors of the vehicle"
+					},
+					"bigSuitcases": {
+						"type": "integer",
+						"description": "How many big suitcases fit in the vehicle"
+					},
+					"smallSuitcases": {
+						"type": "integer",
+						"description": "How many small suitcases fit in the vehicle"
+					},
+					"transmissionType": {
+						"type": "string",
+						"enum": [
+							"Automatic",
+							"Manual"
+						],
+						"description": "Type of the transmission"
+					},
+					"fuelType": {
+						"type": "string",
+						"enum": [
+							"Petrol",
+							"Diesel",
+							"Hybrid",
+							"Electric",
+							"Gas",
+							"Hydrogen",
+							"Multi Fuel",
+							"Ethanol"
+						],
+						"description": "Type of the fuel"
+					},
+					"driveType": {
+						"type": "string",
+						"enum": [
+							"4WD",
+							"AWD"
+						],
+						"description": "Type of the drive"
+					},
+					"age": {
+						"type": "object",
+						"description": "If supplier provides bookable range then min max could be returned so driveragecheck can be enabled (overriden by Driver Age Manager)",
+						"properties": {
+							"max": {
+								"type": "integer",
+								"minimum": 18,
+								"maximum": 99,
+								"description": "Car availability max age"
+							},
+							"min": {
+								"type": "integer",
+								"minimum": 18,
+								"maximum": 99,
+								"description": "Car availability min age"
+							}
+						},
+						"required": [
+							"max",
+							"min"
+						]
+					},
+					"keyless": {
+						"type": "boolean",
+						"description": "Keyless"
+					},
+					"additionalAttributes": {
+						"type": "array",
+						"description": "Additional attributes",
+						"items": {
+							"type": "object",
+							"required": [
+								"name",
+								"value"
+							],
+							"properties": {
+								"attribute": {
+									"type": "string",
+									"description": "Name"
+								},
+								"value": {
+									"description": "Value"
+								}
+							}
+						},
+						"uniqueItems": true
+					},
+					"basePrice": {
+						"$ref": "#/components/schemas/PriceAmount"
+					},
+					"supplierRateReference": {
+						"type": "string",
+						"description": "Supplier rate reference"
+					},
+					"modelGuaranteed": {
+						"type": "boolean",
+						"description": "Is the proposed model guaranteed"
+					},
+					"imageUrl": {
+						"type": "string",
+						"description": "URL to supplier vehicle image"
+					},
+					"mileage": {
+						"$ref": "#/components/schemas/Mileage"
+					},
+					"status": {
+						"type": "string",
+						"description": "Status",
+						"enum": [
+							"AVAILABLE",
+							"ON_REQUEST"
+						]
+					},
+					"extrasAndFees": {
+						"type": "array",
+						"description": "Extras and fees",
+						"items": {
+							"$ref": "#/components/schemas/ExtraOrFee"
+						}
+					}
+				}
+			},
+			"RequestBranch": {
+				"type": "object",
+				"required": [
+					"code",
+					"country",
+					"dateTime"
+				],
+				"properties": {
+					"code": {
+						"type": "string",
+						"description": "Branch code"
+					},
+					"country": {
+						"description": "Country ISO code of branch",
+						"type": "string",
+						"pattern": "^[A-Z]{2}$",
+						"example": "GB"
+					},
+					"dateTime": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"iata": {
+						"type": "string"
+					}
+				}
+			},
+			"Mileage": {
+				"type": "object",
+				"properties": {
+					"unlimited": {
+						"type": "boolean",
+						"description": "Unlimited mileage during rental"
+					},
+					"includedDistance": {
+						"type": "string",
+						"description": "Number of Kilometers/miles free of charge included in rental price"
+					},
+					"distanceUnit": {
+						"type": "string",
+						"enum": [
+							"Km",
+							"Mile"
+						],
+						"description": "Included distance units."
+					},
+					"periodUnit": {
+						"type": "string",
+						"enum": [
+							"Day",
+							"Hour",
+							"RentalPeriod"
+						],
+						"description": "Included mileage period unit."
+					}
+				}
+			},
+			"SupplierResponseErrors": {
+				"type": "array",
+				"description": "List supplier errors",
+				"items": {
+					"$ref": "#/components/schemas/SupplierResponseError"
+				}
+			},
+			"SupplierResponseError": {
+				"type": "object",
+				"required": [
+					"message",
+					"code"
+				],
+				"properties": {
+					"message": {
+						"type": "string",
+						"description": "Message"
+					},
+					"code": {
+						"type": "string",
+						"description": "Supplier code",
+						"enum": [
+							"ConnectionError",
+							"TimeoutError",
+							"SupplierError"
+						]
+					},
+					"details": {
+						"type": "string",
+						"description": "Details"
+					}
+				}
+			},
+			"ExtraOrFee": {
+				"type": "object",
+				"required": [
+					"type",
+					"code",
+					"name",
+					"price",
+					"includedInRate",
+					"mandatory",
+					"payLocal"
+				],
+				"properties": {
+					"code": {
+						"type": "string",
+						"description": "Code"
+					},
+					"name": {
+						"type": "string",
+						"description": "Name"
+					},
+					"price": {
+						"$ref": "#/components/schemas/PriceAmount"
+					},
+					"includedInRate": {
+						"type": "boolean",
+						"description": "Is included"
+					},
+					"payLocal": {
+						"type": "boolean",
+						"description": "Is payed at pickup"
+					},
+					"mandatory": {
+						"type": "boolean",
+						"description": "Is mandatory"
+					},
+					"unit": {
+						"type": "string",
+						"enum": [
+							"per day",
+							"per rental"
+						]
+					},
+					"maxQuantity": {
+						"type": "integer",
+						"description": "Maximum quantity of extra items"
+					},
+					"type": {
+						"type": "string",
+						"enum": [
+							"VCP",
+							"VCT",
+							"EQP"
+						],
+						"description": "Type"
+					},
+					"excess": {
+						"$ref": "#/components/schemas/PriceAmount"
+					}
+				}
+			},
+			"SupplierRequests": {
+				"type": "array",
+				"description": "Requests made to and responses received from supplier system",
+				"items": {
+					"$ref": "#/components/schemas/SupplierRequest"
+				}
+			},
+			"SupplierRequest": {
+				"type": "object",
+				"properties": {
+					"name": {
+						"description": "Request name (e.g. rates, location, booking, etc)",
+						"type": "string",
+						"enum": [
+							"rates",
+							"extras",
+							"booking",
+							"booking-status",
+							"modify",
+							"cancel",
+							"quote",
+							"locations",
+							"auth"
+						]
+					},
+					"requestContent": {
+						"$ref": "#/components/schemas/RequestContent"
+					},
+					"responseContent": {
+						"$ref": "#/components/schemas/ResponseContent"
+					},
+					"startDateTime": {
+						"description": "Datetime when the request was submitted",
+						"type": "string",
+						"format": "date-time"
+					},
+					"duration": {
+						"description": "Duration",
+						"type": "integer"
+					}
+				}
+			},
+			"RequestContent": {
+				"type": "object",
+				"properties": {
+					"url": {
+						"description": "Targeted url",
+						"type": "string"
+					},
+					"method": {
+						"description": "Request method",
+						"type": "string"
+					},
+					"body": {
+						"description": "Request body",
+						"type": "string"
+					},
+					"headers": {
+						"description": "Request headers",
+						"type": "object"
+					}
+				}
+			},
+			"ResponseContent": {
+				"type": "object",
+				"properties": {
+					"statusCode": {
+						"description": "Response status",
+						"type": "integer"
+					},
+					"headers": {
+						"description": "Response headers",
+						"type": "object"
+					},
+					"body": {
+						"description": "Response body",
+						"type": "string"
+					}
+				}
+			},
+			"PriceAmount": {
+				"type": "object",
+				"required": [
+					"currency",
+					"amount"
+				],
+				"description": "Price amount with currency",
+				"properties": {
+					"amount": {
+						"type": "number",
+						"x-go-type": "RoundedFloat"
+					},
+					"currency": {
+						"type": "string",
+						"pattern": "^[A-Z]{3}$"
+					}
+				}
+			},
+			"Timeouts": {
+				"type": "object",
+				"required": [
+					"default"
+				],
+				"properties": {
+					"rates": {
+						"type": "integer",
+						"description": "Maximum time in milliseconds rates request is expected to return answer"
+					},
+					"default": {
+						"type": "integer",
+						"description": "Default value for maximum time in milliseconds when request is expected to return answer"
+					},
+					"booking": {
+						"type": "integer",
+						"description": "Maximum time in milliseconds booking request is expected to return answer"
+					},
+					"cancel": {
+						"type": "integer",
+						"description": "Maximum time in milliseconds cancel request is expected to return answer"
+					},
+					"extras": {
+						"type": "integer",
+						"description": "Maximum time in milliseconds extras request is expected to return answer"
+					},
+					"locations": {
+						"type": "integer",
+						"description": "Maximum time in milliseconds locations request is expected to return answer"
+					}
+				}
+			},
+			"HertzConfiguration": {
+				"type": "object",
+				"description": "Supplier specific parameters for all post-type requests except booking. Override in supplier module for all post-routes except booking",
+				"required": [
+					"supplierApiUrl",
+					"vendorCode"
+				],
+				"properties": {
+					"supplierApiUrl": {
+						"type": "string",
+						"description": "Supplier API url"
+					},
+					"vendorCode": {
+						"type": "string",
+						"description": "Vendor code like ZE, FF, ZR or ZT"
+					},
+					"vendorCodeImport": {
+						"type": "string",
+						"description": "Mapping vendor code like ZE, FF, ZR or ZT"
+					},
+					"vehicleWhereAtMapping": {
+						"type": "object",
+						"description": "Vehicle where at mapping"
+					},
+					"residenceCountryMapping": {
+						"type": "object",
+						"description": "Residence country mapping. Residence of the customer in request in mapped to the country as in property value. Example: {\"AT\":\"DE\",\"IE\":\"BE\",\"SE\":\"DK\"}",
+						"additionalProperties": {
+							"type": "string"
+						}
+					},
+					"maxResponses": {
+						"type": "string",
+						"description": "Max number of responses expected from Hertz. Default is 10"
+					},
+					"sendVoucher": {
+						"type": "boolean",
+						"description": "Send or not Voucher element"
+					},
+					"FrequentTravellerProgramId": {
+						"type": "string",
+						"description": "For FTN identifies the company associated with the FTN/MembershipId"
+					},
+					"FrequentTravellerTravelSector": {
+						"type": "string",
+						"description": "For FTN identifies FTN/MemmbershipID number. Allowed Values: 1 - FTN is Airline Frequent Flyer #, 2- #1 Club Number, 3 - Hotel Frequent Traveller #"
+					},
+					"proxyjsHops": {
+						"type": "string",
+						"description": "Intermediate ProxyJS servers"
+					},
+					"taxExclCoverageCountries": {
+						"type": "array",
+						"description": "Tax exclusive coverage countries. Example: [\"AA\", \"BB\"]",
+						"items": {
+							"type": "string"
+						}
+					},
+					"taxExclFees": {
+						"type": "string",
+						"description": "Fees that are tax exclusive in certain countries. Example: { \"AIRPORT CONCESSION RECOVERY\": [\"SE\", \"SA\"] }"
+					},
+					"feePayableLocally": {
+						"type": "object",
+						"additionalProperties": {
+							"type": "array",
+							"items": {
+							  "type": "string"
+							}
+						},
+						"description": "Fees that are considered allways payable locally in certain countries. Example: { \"AIRPORT CONCESSION RECOVERY\": [\"SE\", \"SA\"] }"
+					},
+					"cacheDebuglog": {
+						"type": "string",
+						"description": "Send detailed requests logging info for debugging"
+					},
+					"taco": {
+						"type": "string",
+						"description": "Travel Agency Commission Number"
+					},
+					"vc": {
+						"type": "string",
+						"description": "Validation Code assigned by Hertz"
+					},
+					"vn": {
+						"type": "string",
+						"description": "Vendor Number"
+					},
+					"cp": {
+						"type": "string",
+						"description": "Consumer Product Code"
+					},
+					"bookingAgent": {
+						"type": "string",
+						"description": "Booking agent"
+					},
+					"tour": {
+						"type": "string",
+						"description": "IT/Tour Number"
+					},
+					"rateQualifier": {
+						"type": "string",
+						"description": "Rate Qualifier"
+					},
+					"travelPurpose": {
+						"type": "string",
+						"description": "Travel Purpose"
+					},
+					"corpDiscountNmbr": {
+						"type": "string",
+						"description": "Corporate Discount Number"
+					},
+					"promotionCode": {
+						"type": "string",
+						"description": "Promotion Code"
+					},
+					"clubNumber": {
+						"type": "string",
+						"description": "Club Number"
+					},
+					"frequentTravellerNumber": {
+						"type": "string",
+						"description": "frequent traveller number"
+					},
+					"supplierPromotionalDiscount": {
+						"type": "object",
+						"description": "Supplier discount percentages for estimated car price without applied supplier discount. [corp_discount_nmbr]_[promotion_code]:discount percentage> - example:{\"154080_169680\":25}"
+					},
+					"fpPayFeesLocally": {
+						"type": "boolean",
+						"description": "It is used with full-prepay deals, to determine are the fees payable locally (true) or pay now (false). Default is false"
+					},
+					"fpPaynowVehiclePriceWithTax": {
+						"type": "boolean",
+						"description": "It works with full-prepay deals. If true, the Tax (VAT) is added to the vehicle price. Default is false"
+					},
+					"useDirectSell": {
+						"type": "boolean",
+						"description": "If true, Direct Sell type booking and modify is used. If false or not present - Reference Sell is used"
+					},
+					"sendAgencyBillingNumberWithBooking": {
+						"type": "boolean",
+						"description": "If this value is set to true in contract, billing number is sent with booking request to supplier"
+					},
+					"voucherContractBillingType": {
+						"type": "string",
+						"description": "If value is Partial, EstimatedTotalAmount from rates request is added to the booking request."
+					},
+					"payNowCoverages": {
+						"type": "array",
+						"description": "Supplier code(s) of coverage(s) that are not included in rate and are have to be set pay now (made for ITSC). Example: [\"7\",\"48\"]",
+						"items": {
+							"type": "string"
+						}
+					},
+					"lastName": {
+						"type": "string",
+						"description": "Customer last name who is the owner of the booking"
+					},
+					"residenceCountry": {
+						"type": "string",
+						"description": "Customer country of residence"
+					},
+					"includeCoveragesInRate": {
+						"type": "boolean",
+						"description": "If true, all required coverages will be included in vehicle price"
+					},
+					"payNowCoveragesWithTax": {
+						"type": "boolean",
+						"description": "If true, all coverages will be added with taxes"
+					},
+					"addTaxToCoverages": {
+						"type": "array",
+						"description": "Coverage codes for which tax is added to the price",
+						"items": {
+							"type": "string"
+						}
+					},
+					"booking": {
+						"type": "object",
+						"required": [
+							"supplierBookingReference",
+							"bookingDateTime"
+						],
+						"properties": {
+							"supplierBookingReference": {
+								"type": "string",
+								"description": "Supplier booking reference"
+							},
+							"bookingDateTime": {
+								"type": "string",
+								"format": "date-time"
+							}
+						}
+					}
+				}
+			},
+			"ProfitMaxDHTConfiguration":{
+				"type": "object",
+				"description": "Supplier specific parameters for all post-type requests",
+				"required": [
+					"supplierApiUrl",
+					"username",
+					"password",
+					"client",
+					"destination"
+				],
+				"properties": {
+					"supplierApiUrl": {
+						"type": "string",
+						"description": "Supplier API url"
+					},
+					"username": {
+						"type": "string",
+						"description": "Supplier Username"
+					},
+					"password": {
+						"type": "string",
+						"description": "Supplier Password"
+					},
+					"client": {
+						"type": "string",
+						"description": "Brokers Name"
+					},
+					"destination": {
+						"type": "string",
+						"description": "Vendor Name: Dollar, Thrifty, Hertz"
+					},
+					"maxResponses": {
+						"type": "integer",
+						"description": "Max number of responses expected from Hertz. Default is 10"
+					},
+					"travelPurpose": {
+						"type": "string",
+						"description": "Travel Purpose"
+					},
+					"test": {
+						"type":"boolean",
+						"description": "indicate the target of request, if true test environment else request sent to production"
+					},
+					"rateQualifier": {
+						"type": "string",
+						"description": "Rate Qualifier"
+					},
+					"agentDutyCode": {
+						"type": "string",
+						"description": "Agent Duty code for Profitmax"
+					},
+					"vn": {
+						"type": "string",
+						"description": "Requestor Id for type 4 requestorId"
+					},
+					"cp": {
+						"type": "string",
+						"description": "Company Name Code"
+					},
+					"vendorCode": {
+						"type": "string",
+						"description": "Vendor Code"
+					},
+					"residenceCountry": {
+						"type": "string",
+						"description": "Customer country of residence"
+					},
+					"lastName": {
+						"type": "string",
+						"description": "Customer's Lastname"
+					},
+					"sendVoucher": {
+						"type": "boolean",
+						"description": "Send or not Voucher element"
+					},
+					"fpPaynowVehiclePriceWithTax": {
+						"type": "boolean",
+						"description": "It works with full-prepay deals. If true, the Tax (VAT) is added to the vehicle price. Default is false"
+					},
+					"fpPayFeesLocally": {
+						"type": "boolean",
+						"description": "It is used with full-prepay deals, to determine are the fees payable locally (true) or pay now (false). Default is false"
+					},
+					"tourNumber": {
+						"type": "string",
+						"description": "Tour Number"
+					}
+				}
+			},
+			"BookingComConfiguration": {
+				"type": "object",
+				"description": "Supplier specific parameters for all post-type requests except booking. Override in supplier module for all post-routes except booking",
+				"required": [
+					"supplierApiUrl",
+					"username",
+					"password",
+					"affiliateCode",
+					"supplierName"
+				],
+				"properties": {
+					"supplierApiUrl": {
+						"type": "string",
+						"description": "Supplier api url"
+					},
+					"username": {
+						"type": "string",
+						"description": "Username"
+					},
+					"password": {
+						"type": "string",
+						"description": "Password"
+					},
+					"affiliateCode": {
+						"type": "string",
+						"description": "Affiliate code"
+					},
+					"supplierName": {
+						"type": "string",
+						"description": "Supplier name, which is used for filtering out vehicles"
+					},
+					"test": {
+						"type": "boolean",
+						"description": "Test mode"
+					}
+				}
+			},
+			"AnyRentConfiguration": {
+				"type": "object",
+				"description": "Supplier specific parameters for all post-type requests except booking. Override in supplier module for all post-routes except booking",
+				"required": [
+					"supplierApiUrl",
+					"apiKey"
+				],
+				"properties": {
+					"supplierApiUrl": {
+						"type": "string",
+						"description": "Supplier api url"
+					},
+					"apiKey": {
+						"type": "string",
+						"description": "Api key"
+					}
+				}
+			},
+			"RentlyConfiguration": {
+				"type": "object",
+				"description": "Supplier specific parameters for all post-type requests except booking. Override in supplier module for all post-routes except booking",
+				"required": [
+					"supplierApiUrl",
+					"username",
+					"password",
+					"commercialAgreementCode"
+				],
+				"properties": {
+					"supplierApiUrl": {
+						"type": "string",
+						"description": "Supplier api url"
+					},
+					"username": {
+						"type": "string",
+						"description": "Username"
+					},
+					"password": {
+						"type": "string",
+						"description": "Password"
+					},
+					"commercialAgreementCode": {
+						"type": "string",
+						"enum": [
+							"Prepaid",
+							"PayOnDestination"
+						],
+						"description": "Commercial agreement code"
+					}
+				}
+			},
+			"Contact": {
+				"type": "object",
+				"description": "Contact info",
+				"required": [
+					"email"
+				],
+				"properties": {
+					"email": {
+						"type": "string",
+						"format": "email",
+						"description": "E-mail"
+					}
+				}
+			},
+			"BookingStatusRequestParams": {
+				"required": [
+					"supplierBookingReference",
+					"reservNumber",
+					"brokerReference",
+					"bookingDateTime",
+					"moduleId",
+					"configuration",
+					"timeouts"
+				],
+				"properties": {
+					"supplierBookingReference": {
+						"type": "string",
+						"description": "Supplier booking reference"
+					},
+					"reservNumber": {
+						"type": "string",
+						"description": "Car Rental Gateway booking reservation number"
+					},
+					"brokerReference": {
+						"type": "string",
+						"description": "Car Rental Gateway booking/broker reference"
+					},
+					"bookingDateTime": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"moduleId": {
+						"type": "integer",
+						"description": "Module ID"
+					},
+					"contact": {
+						"$ref": "#/components/schemas/Contact"
+					},
+					"configuration": {
+						"anyOf": [{
+							"$ref": "#/components/schemas/HertzConfiguration"
+						}, {
+							"$ref": "#/components/schemas/ProfitMaxDHTConfiguration"
+						},{
+							"$ref": "#/components/schemas/BookingComConfiguration"
+						},{
+							"$ref": "#/components/schemas/AnyRentConfiguration"
+						}, {
+							"$ref": "#/components/schemas/RentlyConfiguration"
+						}]
+					},
+					"timeouts": {
+						"$ref": "#/components/schemas/Timeouts"
+					}
+				}
+			},
+			"BookingStatusResponse": {
+				"type": "object",
+				"required": [
+					"status"
+				],
+				"properties": {
+					"supplierBookingReference": {
+						"type": "string",
+						"description": "Supplier booking reference"
+					},
+					"status": {
+						"type": "string",
+						"enum": [
+							"OK",
+							"FAILED",
+							"PENDING",
+							"CANCELLED"
+						],
+						"description": "Booking status"
+					},
+					"supplierRequests": {
+						"$ref": "#/components/schemas/SupplierRequests"
+					},
+					"errors": {
+						"$ref": "#/components/schemas/SupplierResponseErrors"
+					}
+				}
+			},
+			"LocationsRequestParams": {
+				"required": [
+					"configuration",
+					"timeouts"
+				],
+				"properties": {
+					"configuration": {
+						"oneOf": [{
+							"$ref": "#/components/schemas/HertzConfiguration"
+						}, {
+							"$ref": "#/components/schemas/ProfitMaxDHTConfiguration"
+						}, {
+							"$ref": "#/components/schemas/BookingComConfiguration"
+						},{
+							"$ref": "#/components/schemas/AnyRentConfiguration"
+						}, {
+							"$ref": "#/components/schemas/RentlyConfiguration"
+						}]
+					},
+					"timeouts": {
+						"$ref": "#/components/schemas/Timeouts"
+					}
+				}
+			},
+			"LocationsResponse": {
+				"type": "object",
+				"properties": {
+					"locations": {
+						"type": "array",
+						"description": "Locations available for the supplier",
+						"items": {
+							"$ref": "#/components/schemas/Location"
+						}
+					},
+					"supplierRequests": {
+						"$ref": "#/components/schemas/SupplierRequests"
+					},
+					"errors": {
+						"$ref": "#/components/schemas/SupplierResponseErrors"
+					}
+				}
+			},
+			"Location": {
+				"type": "object",
+				"required": [
+					"code",
+					"name",
+					"country",
+					"rawData"
+				],
+				"properties": {
+					"code": {
+						"description": "Location code",
+						"type": "string"
+					},
+					"iata": {
+						"description": "IATA code",
+						"type": "string",
+						"pattern": "^[A-Z]{3}$"
+					},
+					"name": {
+						"description": "Location name",
+						"type": "string"
+					},
+					"country": {
+						"description": "Country ISO code",
+						"type": "string",
+						"pattern": "^[A-Z]{2}$"
+					},
+					"state": {
+						"description": "State name",
+						"type": "string"
+					},
+					"city": {
+						"description": "City",
+						"type": "string"
+					},
+					"address": {
+						"description": "Address",
+						"type": "string"
+					},
+					"address2": {
+						"description": "Address line 2",
+						"type": "string"
+					},
+					"address3": {
+						"description": "Address line 3",
+						"type": "string"
+					},
+					"postalCode": {
+						"description": "Postal code",
+						"type": "string"
+					},
+					"latitude": {
+						"description": "Latitude",
+						"type": "number"
+					},
+					"longitude": {
+						"description": "Longitude",
+						"type": "number"
+					},
+					"vehicleWhereAt": {
+						"description": "Vehicle where at facility (VWF) -  OTA standard ",
+						"type": "integer",
+						"minimum": 0
+					},
+					"specialInstructions": {
+						"description": "Special instructions",
+						"type": "string"
+					},
+					"email": {
+						"description": "Location primary e-mail",
+						"type": "string",
+						"format": "email"
+					},
+					"phone": {
+						"description": "Phone",
+						"type": "string"
+					},
+					"additionalContact": {
+						"description": "All other means for contacting the supplier's location",
+						"type": "array",
+						"items": {
+							"type": "object",
+							"required": [
+								"contactType",
+								"value"
+							],
+							"properties": {
+								"contactType": {
+									"type": "string",
+									"enum": [
+										"other",
+										"mobile",
+										"phone",
+										"fax",
+										"tollfree"
+									]
+								},
+								"value": {
+									"type": "string"
+								}
+							}
+						}
+					},
+					"vehicles": {
+						"description": "Vehicles. Will be returned when microservice requests vehicles per location",
+						"type": "array",
+						"items": {}
+					},
+					"extras": {
+						"description": "Extras. Will be returned when microservice requests extras per location",
+						"type": "array",
+						"items": {}
+					},
+					"currency": {
+						"description": "Currency",
+						"type": "string",
+						"pattern": "^[A-Z]{3}$"
+					},
+					"startReservationHours": {
+						"description": "Minimum hours to car pickup",
+						"type": "integer",
+						"minimum": 0
+					},
+					"minRentalDays": {
+						"description": "Minimum rental days",
+						"type": "integer",
+						"minimum": 0
+					},
+					"maxRentalDays": {
+						"description": "Maximum rental days",
+						"type": "integer",
+						"minimum": 0
+					},
+					"openingHours": {
+						"description": "Opening hours",
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/OpeningTime"
+						}
+					},
+					"oohPickup": {
+						"type": "boolean"
+					},
+					"oohDropoff": {
+						"type": "boolean"
+					},
+					"dropOffBranches": {
+						"description": "Drop-off branches (including fees)",
+						"type": "array",
+						"items": {}
+					},
+					"rawData": {
+						"description": "Original supplier data",
+						"type": "object",
+						"required": [
+							"content",
+							"contentType"
+						],
+						"properties": {
+							"content": {
+								"type": "string"
+							},
+							"contentType": {
+								"type": "string"
+							}
+						}
+					}
+				}
+			},
+			"OpeningTime": {
+				"type": "object",
+				"required": [
+					"weekday",
+					"open",
+					"start",
+					"end"
+				],
+				"properties": {
+					"weekday": {
+						"type": "integer",
+						"pattern": "^[0-7]$",
+						"description": "0 - everyday, others - weekday"
+					},
+					"open": {
+						"type": "boolean"
+					},
+					"start": {
+						"type": "string",
+						"pattern": "^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$"
+					},
+					"end": {
+						"type": "string",
+						"pattern": "^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]"
+					},
+					"day": {
+						"type": "integer",
+						"pattern": "^([1-9]|[12][0-9]|3[01])$",
+						"description": "0 - everyday, others - calendar day"
+					},
+					"month": {
+						"type": "integer",
+						"pattern": "^([0-9]|1[0-2])$",
+						"description": "0 - all months, others - calendar month"
+					},
+					"year": {
+						"type": "integer",
+						"pattern": "^[0-9]{4}$",
+						"description": "full year"
+					},
+					"endDay": {
+						"type": "integer",
+						"pattern": "^[0-7]$",
+						"description": "0 - everyday, others - calendar day"
+					},
+					"endMonth": {
+						"type": "integer",
+						"pattern": "^([0-9]|1[0-2])$",
+						"description": "0 - all months, others - calendar month"
+					},
+					"endYear": {
+						"type": "integer",
+						"pattern": "^[0-9]{4}$",
+						"description": "full year"
+					},
+					"ooh": {
+						"type": "boolean"
+					},
+					"fee": {
+						"type": "number"
+					},
+					"applyFee": {
+						"type": "boolean"
+					}
+				},
+				"example": {
+					"weekday": 7,
+						"start": "06:00",
+						"end": "23:59",
+						"fee": 0,
+						"applyFee": false,
+						"day": 0,
+						"month": 0,
+						"year": 2020,
+						"endDay": 0,
+						"endMonth": 0,
+						"endYear": 2030,
+						"open": true,
+						"ooh": false
+				}
+			}
+		},
+		"parameters": {
+			"requiredPlatformInPath": {
+				"name": "platform",
+				"in": "path",
+				"description": "Platform ID",
+				"required": true,
+				"schema": {
+					"type": "string",
+					"minLength": 1,
+					"enum": [
+						"hertz",
+						"profitmaxdht",
+						"bookingcom",
+						"anyrent",
+						"rently"
+					]
+				}
+			}
+		}
+	}
+}

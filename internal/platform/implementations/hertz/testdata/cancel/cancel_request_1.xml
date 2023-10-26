@@ -1,0 +1,21 @@
+<OTA_VehCancelRQ xmlns="http://www.opentravel.org/OTA/2003/05" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="http://www.opentravel.org/OTA/2003/05 OTA_VehCancelRQ.xsd" Version="1.008">
+    <POS>
+        <Source ISOCountry="GB" AgentDutyCode="5E24X16P9IA">
+            <RequestorID Type="4" ID="T744">
+                <CompanyName Code="CP" CodeContext="3X93"></CompanyName>
+            </RequestorID>
+        </Source>
+        <Source>
+            <RequestorID Type="8" ID="ZE"></RequestorID>
+        </Source>
+        <Source>
+            <RequestorID Type="5" ID="91266313"></RequestorID>
+        </Source>
+    </POS>
+    <VehCancelRQCore CancelType="Book">
+        <UniqueID Type="14" ID="K48730916F3"></UniqueID>
+        <PersonName>
+            <Surname>TESTNAME</Surname>
+        </PersonName>
+    </VehCancelRQCore>
+</OTA_VehCancelRQ>

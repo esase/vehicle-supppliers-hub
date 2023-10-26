@@ -1,0 +1,3803 @@
+{
+	"openapi": "3.0.1",
+	"info": {
+		"title": "user-service",
+		"version": "1.0.0"
+	},
+	"servers": [
+		{
+			"url": "/"
+		}
+	],
+	"paths": {
+		"/auth/password": {
+			"post": {
+				"tags": [
+					"auth"
+				],
+				"summary": "Auth via password",
+				"description": "Authenticate a user via a username/password pair and optionally perform permission queries on the authenticated user.",
+				"operationId": "authViaPassword",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/AuthViaPassword"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "The user could not be authenticated.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorResponse"
+								}
+							}
+						}
+					}
+				},
+				"x-codegen-request-body-name": "auth"
+			}
+		},
+		"/auth/delegated": {
+			"post": {
+				"tags": [
+					"auth"
+				],
+				"summary": "Auth via delegated access",
+				"description": "Authenticate using delegated access.",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/AuthViaDelegated"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "User was successfully authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Authentication failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorResponse"
+								}
+							}
+						}
+					}
+				},
+				"x-codegen-request-body-name": "auth"
+			}
+		},
+		"/auth/delegated/users": {
+			"get": {
+				"tags": [
+					"auth"
+				],
+				"summary": "Delegated auth users",
+				"description": "Get a list of users that are eligible for delegated authentication.",
+				"parameters": [
+					{
+						"name": "limit",
+						"in": "query",
+						"description": "Limit the number of returned results to this value",
+						"schema": {
+							"maximum": 50,
+							"minimum": 1,
+							"type": "integer",
+							"default": 50
+						}
+					},
+					{
+						"name": "pointer",
+						"in": "query",
+						"description": "Value of nextPointer returned in the response to a previous request",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "List of allowed delegated authentication users, along with the actor user.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"actor": {
+											"$ref": "#/components/schemas/DelegatedAuthUser"
+										},
+										"users": {
+											"type": "array",
+											"items": {
+												"$ref": "#/components/schemas/DelegatedAuthUser"
+											}
+										},
+										"limit": {
+											"minimum": 0,
+											"type": "integer",
+											"description": "Number of rows to which the response has been limited"
+										},
+										"nextPointer": {
+											"type": "string",
+											"description": "Pointer value for getting the next set of rows"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/auth/session": {
+			"post": {
+				"tags": [
+					"auth"
+				],
+				"summary": "Auth via session ID",
+				"description": "Authenticate a user using a session ID.",
+				"operationId": "authViaSession",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/AuthViaSession"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "User was successfully authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "The user could not be authenticated due to invalid or expired session identifier",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorResponse"
+								}
+							}
+						}
+					}
+				},
+				"x-codegen-request-body-name": "auth"
+			}
+		},
+		"/auth/step/change-password": {
+			"post": {
+				"tags": [
+					"auth"
+				],
+				"summary": "Auth step: ChangePassword",
+				"description": "Complete authentication flow when a password change was required.",
+				"operationId": "authStepChangePassword",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/AuthStepChangePassword"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Authenticated, but further steps are required",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthPartialResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "The user could not be authenticated.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorResponse"
+								}
+							}
+						}
+					}
+				},
+				"x-codegen-request-body-name": "body"
+			}
+		},
+		"/auth/step/tfa": {
+			"post": {
+				"tags": [
+					"auth"
+				],
+				"summary": "Auth step: TFA",
+				"description": "Complete the authentication flow when a second factor authentication was required.",
+				"operationId": "authStepTfa",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/AuthStepTfa"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Authenticated, but further steps are required",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthPartialResponseTfa"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "The user could not be authenticated.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorResponse"
+								}
+							}
+						}
+					}
+				},
+				"x-codegen-request-body-name": "body"
+			}
+		},
+		"/auth/step/recaptcha2": {
+			"post": {
+				"tags": [
+					"auth"
+				],
+				"summary": "Auth step: Recaptcha2",
+				"description": "Provide a CAPTCHA response",
+				"operationId": "authStepRecaptcha2",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/AuthStepRecaptcha2"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Authenticated, but further steps are required",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthPartialResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "The user could not be authenticated.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorResponse"
+								}
+							}
+						}
+					}
+				},
+				"x-codegen-request-body-name": "body"
+			}
+		},
+		"/auth/step/finish": {
+			"post": {
+				"tags": [
+					"auth"
+				],
+				"summary": "Auth step: Finish",
+				"description": "Complete authentication flow when intermediate steps were required. It is not possible to perform any permission queries through this endpoint.",
+				"operationId": "authStepFinish",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/AuthStepFinish"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "User was successfully authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "The user could not be authenticated.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorResponse"
+								}
+							}
+						}
+					}
+				},
+				"x-codegen-request-body-name": "body"
+			}
+		},
+		"/openapi.json": {
+			"get": {
+				"summary": "openapi.json",
+				"responses": {
+					"200": {
+						"description": "Description of this API formatted according to the OpenAPI Specification",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/password-rules": {
+			"get": {
+				"tags": [
+					"global-resources"
+				],
+				"summary": "Password rules",
+				"description": "Get password requirements.",
+				"operationId": "getPasswordRules",
+				"responses": {
+					"200": {
+						"description": "Description of password requirements",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"summary": {
+											"type": "string",
+											"description": "Short human-readable summary of the rules",
+											"example": "at least 10 characters with at least one upper-case character, a lower-case character, and a number"
+										},
+										"patterns": {
+											"type": "array",
+											"description": "List of patterns, all of which must match for a password to be valid.",
+											"items": {
+												"type": "string"
+											}
+										}
+									},
+									"example": {
+										"summary": "at least 10 characters with at least one number",
+										"patterns": [
+											".{10}",
+											"[0-9]"
+										]
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/sessions/end": {
+			"post": {
+				"tags": [
+					"sessions"
+				],
+				"summary": "End session",
+				"operationId": "endSession",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/DeleteSession"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"204": {
+						"description": "Session deleted or did not exist",
+						"content": {}
+					}
+				},
+				"x-codegen-request-body-name": "body"
+			}
+		},
+		"/permissions": {
+			"get": {
+				"tags": [
+					"permissions"
+				],
+				"summary": "List permissions",
+				"description": "Get a list of all possible permissions.",
+				"operationId": "getPermissions",
+				"responses": {
+					"200": {
+						"description": "List of permissions",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PermissionList"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/permissions/{permissionCode}/users": {
+			"get": {
+				"tags": [
+					"permissions"
+				],
+				"summary": "Permission usage (users)",
+				"description": "Get a list of all users which use this permission.",
+				"operationId": "getPermissionUsers",
+				"parameters": [
+					{
+						"name": "permissionCode",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "limit",
+						"in": "query",
+						"description": "Limit the number of returned results to this value",
+						"schema": {
+							"maximum": 50,
+							"minimum": 1,
+							"type": "integer",
+							"default": 50
+						}
+					},
+					{
+						"name": "pointer",
+						"in": "query",
+						"description": "Value of nextPointer returned in the response to a previous request",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "username",
+						"in": "query",
+						"description": "Query by an username",
+						"allowEmptyValue": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "usernameMatch",
+						"in": "query",
+						"description": "Username matching method: - `exact` returns only users where the username matches exactly. - `pattern` treats the `username` parameter as a pattern which may contain the wildcard character `*`",
+						"schema": {
+							"type": "string",
+							"default": "exact",
+							"enum": [
+								"exact",
+								"pattern"
+							]
+						}
+					},
+					{
+						"name": "agencyId",
+						"in": "query",
+						"description": "Filter by a specific agency",
+						"schema": {
+							"minimum": 1,
+							"type": "number"
+						}
+					},
+					{
+						"name": "agencyIdMatch",
+						"in": "query",
+						"description": "Agency ID matching method: - `direct` returns only users directly under the queried agency - `recursive` returns users from the specified agency and sub-agencies",
+						"schema": {
+							"type": "string",
+							"default": "direct",
+							"enum": [
+								"direct",
+								"recursive"
+							]
+						}
+					},
+					{
+						"name": "managed",
+						"in": "query",
+						"description": "Show only managed or non-managed users",
+						"schema": {
+							"type": "boolean"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "List of users",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PermissionUsersResponse"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/permissions/{permissionCode}/policies": {
+			"get": {
+				"tags": [
+					"permissions"
+				],
+				"summary": "Permission usage (policies)",
+				"description": "Get a list of all policies which use this permission.",
+				"operationId": "getPermissionPolicies",
+				"parameters": [
+					{
+						"name": "permissionCode",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "limit",
+						"in": "query",
+						"description": "Limit the number of returned results to this value",
+						"schema": {
+							"maximum": 50,
+							"minimum": 1,
+							"type": "integer",
+							"default": 50
+						}
+					},
+					{
+						"name": "pointer",
+						"in": "query",
+						"description": "Value of nextPointer returned in the response to a previous request",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "agencyId",
+						"in": "query",
+						"description": "Filter by a specific agency",
+						"schema": {
+							"minimum": 1,
+							"type": "number"
+						}
+					},
+					{
+						"name": "agencyIdMatch",
+						"in": "query",
+						"description": "Agency ID matching method: - `direct` returns only users directly under the queried agency - `recursive` returns users from the specified agency and sub-agencies",
+						"schema": {
+							"type": "string",
+							"default": "direct",
+							"enum": [
+								"direct",
+								"recursive"
+							]
+						}
+					},
+					{
+						"name": "managed",
+						"in": "query",
+						"description": "Show only managed or non-managed users",
+						"schema": {
+							"type": "boolean"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "List of policies",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PermissionPoliciesResponse"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/permissions-available": {
+			"get": {
+				"tags": [
+					"permissions"
+				],
+				"summary": "Available permissions",
+				"description": "Get a list of permissions which can be granted by the current user.",
+				"operationId": "getPermissionsAvailable",
+				"parameters": [
+					{
+						"name": "code",
+						"in": "query",
+						"description": "Query by a permission code",
+						"allowEmptyValue": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "codeMatch",
+						"in": "query",
+						"description": "Permission code matching method: - `exact` returns only permissions where the code matches exactly. - `partial` returns permissions where the code partially matches the provided code.",
+						"schema": {
+							"type": "string",
+							"default": "exact",
+							"enum": [
+								"exact",
+								"partial"
+							]
+						}
+					},
+					{
+						"name": "limit",
+						"in": "query",
+						"description": "Limit the number of returned results to this value",
+						"schema": {
+							"maximum": 50,
+							"minimum": 1,
+							"type": "integer",
+							"default": 50
+						}
+					},
+					{
+						"name": "pointer",
+						"in": "query",
+						"description": "Value of nextPointer returned in the response to a previous request",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "The available permissions",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PermissionAvailableList"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/policies": {
+			"get": {
+				"tags": [
+					"policies"
+				],
+				"summary": "List policies",
+				"description": "Get a list of all policies.",
+				"operationId": "getPolicies",
+				"parameters": [
+					{
+						"name": "agencyId",
+						"in": "query",
+						"description": "Display policies owned by this agency. The response will contain only policies owned directly by this agency, not an of it's sub-agencies.",
+						"schema": {
+							"minimum": 1,
+							"type": "integer"
+						}
+					},
+					{
+						"name": "managed",
+						"in": "query",
+						"description": "Show only managed policies",
+						"schema": {
+							"type": "boolean",
+							"default": true
+						}
+					},
+					{
+						"name": "name",
+						"in": "query",
+						"description": "Query by an name",
+						"allowEmptyValue": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "nameMatch",
+						"in": "query",
+						"description": "Name matching method: - `exact` returns only policies where the name matches exactly. - `pattern` treats the `name` parameter as a pattern which may contain the wildcard character `*`",
+						"schema": {
+							"type": "string",
+							"default": "exact",
+							"enum": [
+								"exact",
+								"pattern"
+							]
+						}
+					},
+					{
+						"name": "limit",
+						"in": "query",
+						"description": "Limit the number of returned results to this value",
+						"schema": {
+							"maximum": 50,
+							"minimum": 1,
+							"type": "integer",
+							"default": 50
+						}
+					},
+					{
+						"name": "pointer",
+						"in": "query",
+						"description": "Value of nextPointer returned in the response to a previous request",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "List of policies",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PolicyList"
+								}
+							}
+						}
+					}
+				}
+			},
+			"post": {
+				"tags": [
+					"policies"
+				],
+				"summary": "Create policy",
+				"operationId": "createPolicy",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Policy"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"201": {
+						"description": "The policy has been created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"id": {
+											"type": "string",
+											"description": "Id of the newly-created policy"
+										}
+									},
+									"example": {
+										"id": "5a9e8df33f787d67d22673c1"
+									}
+								}
+							}
+						}
+					}
+				},
+				"x-codegen-request-body-name": "policy"
+			}
+		},
+		"/policies/{policyId}": {
+			"get": {
+				"tags": [
+					"policies"
+				],
+				"summary": "Get policy",
+				"description": "Get a single policy using it's ID.",
+				"operationId": "getPolicy",
+				"parameters": [
+					{
+						"name": "policyId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "The requested policy",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Policy"
+								}
+							}
+						}
+					}
+				}
+			},
+			"post": {
+				"tags": [
+					"policies"
+				],
+				"summary": "Edit policy",
+				"operationId": "editPolicy",
+				"parameters": [
+					{
+						"name": "policyId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/PolicyEdit"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"204": {
+						"description": "The policy has been edited",
+						"content": {}
+					}
+				},
+				"x-codegen-request-body-name": "policyEdit"
+			},
+			"delete": {
+				"tags": [
+					"policies"
+				],
+				"summary": "Delete policy",
+				"description": "Delete a policy. This operation will be rejected if the policy is attached to any resources.",
+				"operationId": "deletePolicy",
+				"parameters": [
+					{
+						"name": "policyId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"204": {
+						"description": "The policy has been deleted",
+						"content": {}
+					},
+					"422": {
+						"description": "The policy cannot be deleted due to unmet pre-conditions",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorResponse"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/policies/{policyId}/permissions": {
+			"get": {
+				"tags": [
+					"policies"
+				],
+				"summary": "Get policy permissions",
+				"description": "Get all permissions under this policy.",
+				"operationId": "getPolicyPermissions",
+				"parameters": [
+					{
+						"name": "policyId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "The list of permission object that belong to requested policy",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PermissionList"
+								}
+							}
+						}
+					}
+				}
+			},
+			"post": {
+				"tags": [
+					"policies"
+				],
+				"summary": "Add permission to policy",
+				"description": "Add a permission to policy.",
+				"operationId": "addPolicyPermission",
+				"parameters": [
+					{
+						"name": "policyId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/PolicyPermission"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Policy already contains such permission",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PolicyPermission"
+								}
+							}
+						}
+					},
+					"201": {
+						"description": "Permission was added to the policy",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PolicyPermission"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Permission cannot be added to the policy. This can be caused by the permission's user level constraints being incompatible with the policy's user levels.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorResponse"
+								}
+							}
+						}
+					}
+				},
+				"x-codegen-request-body-name": "body"
+			}
+		},
+		"/policies/{policyId}/permissions-available": {
+			"get": {
+				"tags": [
+					"policies"
+				],
+				"summary": "Available permissions",
+				"description": "Get a list of permissions which can be added to this policy.",
+				"operationId": "getPolicyPermissionsAvailable",
+				"parameters": [
+					{
+						"name": "policyId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "The available permissions",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PermissionList"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/policies/{policyId}/users": {
+			"get": {
+				"tags": [
+					"policies"
+				],
+				"summary": "Policy usage",
+				"description": "Get all users that use the policy.",
+				"operationId": "getPolicyUsers",
+				"parameters": [
+					{
+						"name": "policyId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "limit",
+						"in": "query",
+						"description": "Limit the number of returned results to this value",
+						"schema": {
+							"maximum": 50,
+							"minimum": 1,
+							"type": "integer",
+							"default": 50
+						}
+					},
+					{
+						"name": "pointer",
+						"in": "query",
+						"description": "Value of nextPointer returned in the response to a previous request",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "username",
+						"in": "query",
+						"description": "Query by an username",
+						"allowEmptyValue": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "usernameMatch",
+						"in": "query",
+						"description": "Username matching method: - `exact` returns only users where the username matches exactly. - `pattern` treats the `username` parameter as a pattern which may contain the wildcard character `*`",
+						"schema": {
+							"type": "string",
+							"default": "exact",
+							"enum": [
+								"exact",
+								"pattern"
+							]
+						}
+					},
+					{
+						"name": "agencyId",
+						"in": "query",
+						"description": "Filter by a specific agency",
+						"schema": {
+							"minimum": 1,
+							"type": "number"
+						}
+					},
+					{
+						"name": "agencyIdMatch",
+						"in": "query",
+						"description": "Agency ID matching method: - `direct` returns only users directly under the queried agency - `recursive` returns users from the specified agency and sub-agencies",
+						"schema": {
+							"type": "string",
+							"default": "direct",
+							"enum": [
+								"direct",
+								"recursive"
+							]
+						}
+					},
+					{
+						"name": "managed",
+						"in": "query",
+						"description": "Show only managed or non-managed users",
+						"schema": {
+							"type": "boolean"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "List of users",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PolicyUsersResponse"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/policies/{policyId}/permissions/{permissionCode}": {
+			"delete": {
+				"tags": [
+					"policies"
+				],
+				"summary": "Remove policy permission",
+				"description": "Remove a permission from policy.",
+				"operationId": "deletePolicyPermission",
+				"parameters": [
+					{
+						"name": "policyId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "permissionCode",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"204": {
+						"description": "Permission was removed",
+						"content": {}
+					}
+				}
+			}
+		},
+		"/scopes": {
+			"get": {
+				"tags": [
+					"permissions"
+				],
+				"summary": "Get scopes",
+				"description": "Get a list of all scopes.",
+				"operationId": "getScopes",
+				"responses": {
+					"200": {
+						"description": "List of all scopes",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ScopeList"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/status": {
+			"get": {
+				"tags": [
+					"monitoring"
+				],
+				"summary": "Service status",
+				"description": "Get current health status of this service.",
+				"operationId": "getStatus",
+				"responses": {
+					"200": {
+						"description": "The service is healthy",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "The service may be experiencing problems",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/users": {
+			"get": {
+				"tags": [
+					"users"
+				],
+				"summary": "List users",
+				"description": "Get a list of users.",
+				"operationId": "getUsers",
+				"parameters": [
+					{
+						"name": "username",
+						"in": "query",
+						"description": "Query by an username",
+						"allowEmptyValue": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "usernameMatch",
+						"in": "query",
+						"description": "Username matching method: - `exact` returns only users where the username matches exactly. - `pattern` treats the `username` parameter as a pattern which may contain the wildcard character `*`",
+						"schema": {
+							"type": "string",
+							"default": "exact",
+							"enum": [
+								"exact",
+								"pattern"
+							]
+						}
+					},
+					{
+						"name": "agencyId",
+						"in": "query",
+						"description": "Filter by a specific agency",
+						"schema": {
+							"minimum": 1,
+							"type": "number"
+						}
+					},
+					{
+						"name": "agencyIdMatch",
+						"in": "query",
+						"description": "Agency ID matching method: - `direct` returns only users directly under the queried agency - `recursive` returns users from the specified agency and sub-agencies",
+						"schema": {
+							"type": "string",
+							"default": "direct",
+							"enum": [
+								"direct",
+								"recursive"
+							]
+						}
+					},
+					{
+						"name": "managed",
+						"in": "query",
+						"description": "Show only managed or non-managed users",
+						"schema": {
+							"type": "boolean"
+						}
+					},
+					{
+						"name": "limit",
+						"in": "query",
+						"description": "Limit the number of returned results to this value",
+						"schema": {
+							"maximum": 50,
+							"minimum": 1,
+							"type": "integer",
+							"default": 50
+						}
+					},
+					{
+						"name": "pointer",
+						"in": "query",
+						"description": "Value of nextPointer returned in the response to a previous request",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "ids",
+						"in": "query",
+						"description": "Comma-separated user IDs",
+						"schema": {
+							"pattern": "^(\\d+)(,\\d+)*$",
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "List of users",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UsersResponse"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/users/{userId}": {
+			"get": {
+				"tags": [
+					"users"
+				],
+				"summary": "Get user",
+				"description": "Get the basic information of a single user.",
+				"operationId": "getUser",
+				"parameters": [
+					{
+						"name": "userId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"minimum": 1,
+							"type": "integer"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "User information",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/User"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/users/{userId}/password": {
+			"post": {
+				"tags": [
+					"users"
+				],
+				"summary": "Change password",
+				"operationId": "setUserPassword",
+				"parameters": [
+					{
+						"name": "userId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"minimum": 1,
+							"type": "integer"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UserPasswordChange"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"204": {
+						"description": "Password was changed",
+						"content": {}
+					},
+					"409": {
+						"description": "Request was rejected due to an incorrect \"currentPassword\" value.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error"
+								}
+							}
+						}
+					}
+				},
+				"x-codegen-request-body-name": "body"
+			}
+		},
+		"/users/{userId}/permissions": {
+			"get": {
+				"tags": [
+					"users"
+				],
+				"summary": "Get permissions",
+				"description": "Get a list of permissions granted to a user.",
+				"operationId": "getUserPermissions",
+				"parameters": [
+					{
+						"name": "userId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"minimum": 1,
+							"type": "integer"
+						}
+					},
+					{
+						"name": "code",
+						"in": "query",
+						"description": "Query by a permission code",
+						"allowEmptyValue": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "codeMatch",
+						"in": "query",
+						"description": "Permission code matching method: \t\t\t\t\t\t\t\t\t\t\t\t- `exact` returns only permissions where the code matches exactly. \t\t\t\t\t\t- `partial` returns permissions where the code partially matches the provided code.",
+						"schema": {
+							"type": "string",
+							"default": "exact",
+							"enum": [
+								"exact",
+								"partial"
+							]
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "List of user permissions",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PermissionBindingList"
+								}
+							}
+						}
+					}
+				}
+			},
+			"post": {
+				"tags": [
+					"users"
+				],
+				"summary": "Grant permission",
+				"description": "Grant a permission to the user and return a reference to the created user-permission binding",
+				"operationId": "createUserPermission",
+				"parameters": [
+					{
+						"name": "userId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"minimum": 1,
+							"type": "integer"
+						}
+					},
+					{
+						"name": "code",
+						"in": "query",
+						"description": "Query by a permission code",
+						"allowEmptyValue": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "codeMatch",
+						"in": "query",
+						"description": "Permission code matching method: \t\t\t\t\t\t\t\t\t\t\t\t- `exact` returns only permissions where the code matches exactly. \t\t\t\t\t\t- `partial` returns permissions where the code partially matches the provided code.",
+						"schema": {
+							"type": "string",
+							"default": "exact",
+							"enum": [
+								"exact",
+								"partial"
+							]
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/PermissionBinding"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "The user already has such permission binding",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PermissionBindingRef"
+								}
+							}
+						}
+					},
+					"201": {
+						"description": "Permission was granted",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PermissionBindingRef"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Permission could not be granted due to un-met pre-conditions",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorResponse"
+								}
+							}
+						}
+					}
+				},
+				"x-codegen-request-body-name": "userPermission"
+			}
+		},
+		"/users/{userId}/permissions-available": {
+			"get": {
+				"tags": [
+					"users"
+				],
+				"summary": "Available permissions",
+				"description": "Get a list of permissions which can be granted to a user.",
+				"operationId": "getUserPermissionsAvailable",
+				"parameters": [
+					{
+						"name": "userId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"minimum": 1,
+							"type": "integer"
+						}
+					},
+					{
+						"name": "code",
+						"in": "query",
+						"description": "Query by a permission code",
+						"allowEmptyValue": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "codeMatch",
+						"in": "query",
+						"description": "Permission code matching method: \t\t\t\t\t\t\t\t\t\t\t\t- `exact` returns only permissions where the code matches exactly. \t\t\t\t\t\t- `partial` returns permissions where the code partially matches the provided code.",
+						"schema": {
+							"type": "string",
+							"default": "exact",
+							"enum": [
+								"exact",
+								"partial"
+							]
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "The available permissions",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PermissionAvailableList"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/users/{userId}/permissions/{userPermissionId}": {
+			"get": {
+				"tags": [
+					"users"
+				],
+				"summary": "Get permission binding",
+				"description": "Get a single permission binding.",
+				"operationId": "getUserPermission",
+				"parameters": [
+					{
+						"name": "userId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"minimum": 1,
+							"type": "integer"
+						}
+					},
+					{
+						"name": "userPermissionId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "User permission information",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PermissionBinding"
+								}
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"tags": [
+					"users"
+				],
+				"summary": "Remove permission binding",
+				"description": "Remove a permission binding from a user, thus revoking the permission.",
+				"operationId": "removeUserPermission",
+				"parameters": [
+					{
+						"name": "userId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"minimum": 1,
+							"type": "integer"
+						}
+					},
+					{
+						"name": "userPermissionId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"204": {
+						"description": "The permission was successfully removed",
+						"content": {}
+					}
+				}
+			}
+		},
+		"/users/{userId}/permissions/batch": {
+			"post": {
+				"tags": [
+					"users"
+				],
+				"summary": "Grant permissions",
+				"description": "Grant multiple permissions at once.",
+				"operationId": "createUserPermissions",
+				"parameters": [
+					{
+						"name": "userId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"minimum": 1,
+							"type": "integer"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/PermissionBindingList"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Permissions were granted",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"id": {
+											"type": "string",
+											"description": "Binding ID"
+										}
+									},
+									"example": {
+										"id": "5a9e8df33f787d67d22673c1"
+									}
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Permission could not be granted due to un-met pre-conditions",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorResponse"
+								}
+							}
+						}
+					}
+				},
+				"x-codegen-request-body-name": "userPermissions"
+			}
+		},
+		"/users/{userId}/permissions/query": {
+			"post": {
+				"tags": [
+					"users"
+				],
+				"summary": "Query access",
+				"operationId": "queryUserPermissions",
+				"parameters": [
+					{
+						"name": "userId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"minimum": 1,
+							"type": "integer"
+						}
+					},
+					{
+						"name": "explain",
+						"in": "query",
+						"description": "When true, the response will have the allowVia properties filled",
+						"schema": {
+							"type": "boolean"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UserPermissionQueryList"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Query results",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserPermissionQueryResultList"
+								}
+							}
+						}
+					}
+				},
+				"x-codegen-request-body-name": "queries"
+			}
+		},
+		"/users/{userId}/permissions/contexts": {
+			"post": {
+				"tags": [
+					"users"
+				],
+				"summary": "Query contexts",
+				"description": "Query for a list of contexts in which a permission is allowed for the user.",
+				"operationId": "queryUserPermissionsContexts",
+				"parameters": [
+					{
+						"name": "userId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"minimum": 1,
+							"type": "integer"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/PermissionAllowedContextsQueryList"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Query results",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PermissionAllowedContextsList"
+								}
+							}
+						}
+					}
+				},
+				"x-codegen-request-body-name": "queries"
+			}
+		},
+		"/users/{userId}/policies": {
+			"get": {
+				"summary": "Get a list of user's policy bindings",
+				"operationId": "getUserPolicies",
+				"parameters": [
+					{
+						"name": "userId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"minimum": 1,
+							"type": "integer"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "List of user's policy bindings along with the full policy documents",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"bindings": {
+											"type": "array",
+											"description": "Policy bindings",
+											"items": {
+												"$ref": "#/components/schemas/PolicyBinding"
+											}
+										},
+										"policies": {
+											"type": "array",
+											"description": "Full policy descriptions for each policy referenced by the bindings",
+											"items": {
+												"$ref": "#/components/schemas/Policy"
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"post": {
+				"summary": "Bind a policy to the user",
+				"description": " Bind a policy to the user. This can fail due to the user already having an identical binding; the policy not being allowed for the target user's level; the policy not being grantable by the acting user's level.",
+				"operationId": "addUserPolicy",
+				"parameters": [
+					{
+						"name": "userId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"minimum": 1,
+							"type": "integer"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/PolicyBinding"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"201": {
+						"description": "The policy has been bound to the user",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PolicyBindingRef"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Policy cannot be bound to the user",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorResponse"
+								}
+							}
+						}
+					}
+				},
+				"x-codegen-request-body-name": "binding"
+			}
+		},
+		"/users/{userId}/policies/{policyId}": {
+			"delete": {
+				"summary": "Delete a policy binding",
+				"operationId": "removeUserPolicy",
+				"parameters": [
+					{
+						"name": "userId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"minimum": 1,
+							"type": "integer"
+						}
+					},
+					{
+						"name": "policyId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"204": {
+						"description": "The binding has been removed",
+						"content": {}
+					}
+				}
+			}
+		},
+		"/users/{userId}/policies-available": {
+			"get": {
+				"summary": "Get all policies which can be added to the user.",
+				"operationId": "getUserPoliciesAvailable",
+				"parameters": [
+					{
+						"name": "userId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"minimum": 1,
+							"type": "integer"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "List of policies which can be bound to the user",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PolicyList"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/users/{userId}/tfa": {
+			"get": {
+				"summary": "Get TFA status",
+				"description": "Get the user's TFA status.",
+				"operationId": "getUserTfaStatus",
+				"parameters": [
+					{
+						"name": "userId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"minimum": 1,
+							"type": "integer"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "TFA status",
+						"content": {
+							"application/json": {
+								"schema": {
+									"required": [
+										"enabled"
+									],
+									"type": "object",
+									"properties": {
+										"enabled": {
+											"type": "boolean"
+										},
+										"mode": {
+											"type": "string"
+										}
+									},
+									"example": {
+										"enabled": true,
+										"mode": "totp"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/users/{userId}/tfa/setup": {
+			"post": {
+				"summary": "Configure TFA",
+				"description": "Configure TFA for the user without enabling it",
+				"operationId": "setupUserTfa",
+				"parameters": [
+					{
+						"name": "userId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"minimum": 1,
+							"type": "integer"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Configured, not enabled",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"uri": {
+											"type": "string",
+											"description": "URI for configuring the authenticator app"
+										}
+									}
+								}
+							}
+						}
+					},
+					"409": {
+						"description": "Already enabled. TFA must be disabled before re-configuring.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/users/{userId}/tfa/enable": {
+			"post": {
+				"summary": "Enable TFA",
+				"description": "Enable previously-configured TFA",
+				"parameters": [
+					{
+						"name": "userId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"minimum": 1,
+							"type": "integer"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UserTfaEnable"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"204": {
+						"description": "Enabled",
+						"content": {}
+					},
+					"409": {
+						"description": "Not configured, or already enabled",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Invalid code",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error"
+								}
+							}
+						}
+					}
+				},
+				"x-codegen-request-body-name": "body"
+			}
+		},
+		"/users/{userId}/tfa/disable": {
+			"post": {
+				"summary": "Disable TFA",
+				"operationId": "disableUserTfa",
+				"parameters": [
+					{
+						"name": "userId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"minimum": 1,
+							"type": "integer"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UserTfaDisable"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"204": {
+						"description": "Disabled",
+						"content": {}
+					},
+					"409": {
+						"description": "Not enabled",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error"
+								}
+							}
+						}
+					}
+				},
+				"x-codegen-request-body-name": "body"
+			}
+		},
+		"/users/{userId}/notes": {
+			"get": {
+				"summary": "Get notes",
+				"operationId": "getUserNotes",
+				"parameters": [
+					{
+						"name": "userId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"minimum": 1,
+							"type": "integer"
+						}
+					},
+					{
+						"name": "limit",
+						"in": "query",
+						"description": "Limit the number of returned results to this value",
+						"schema": {
+							"maximum": 50,
+							"minimum": 1,
+							"type": "integer",
+							"default": 50
+						}
+					},
+					{
+						"name": "pointer",
+						"in": "query",
+						"description": "Value of nextPointer returned in the response to a previous request",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "List of notes",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"notes": {
+											"type": "array",
+											"items": {
+												"$ref": "#/components/schemas/UserNote"
+											}
+										},
+										"limit": {
+											"minimum": 0,
+											"type": "integer",
+											"description": "Number of rows to which the response has been limited to"
+										},
+										"nextPointer": {
+											"type": "string",
+											"description": "Pointer value for getting the next set of rows"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"post": {
+				"summary": "Leave a note",
+				"operationId": "addUserNote",
+				"parameters": [
+					{
+						"name": "userId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"minimum": 1,
+							"type": "integer"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UserNoteAdd"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"201": {
+						"description": "Note added",
+						"content": {}
+					}
+				},
+				"x-codegen-request-body-name": "body"
+			}
+		},
+		"/user-levels": {
+			"get": {
+				"summary": "Get list of available user levels",
+				"operationId": "getUserLevels",
+				"responses": {
+					"200": {
+						"description": "User levels",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"userLevels": {
+											"type": "array",
+											"items": {
+												"$ref": "#/components/schemas/UserLevel"
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"schemas": {
+			"AuthViaPassword": {
+				"required": [
+					"password",
+					"username"
+				],
+				"type": "object",
+				"properties": {
+					"username": {
+						"type": "string",
+						"example": "jdoe"
+					},
+					"password": {
+						"type": "string",
+						"example": "hunter2"
+					},
+					"permissionQueries": {
+						"$ref": "#/components/schemas/AuthPermissionQueries"
+					},
+					"capabilities": {
+						"$ref": "#/components/schemas/AuthCapabilitiesList"
+					},
+					"forResults": {
+						"$ref": "#/components/schemas/AuthResultsList"
+					}
+				},
+				"description": "Authentication request via a username/password pair",
+				"example": {
+					"username": "jdoe",
+					"newPassword": "hunter2",
+					"capabilities": [
+						"Tfa",
+						"Finish"
+					],
+					"forResults": [
+						"SessionId"
+					]
+				}
+			},
+			"AuthViaSession": {
+				"required": [
+					"sessionId"
+				],
+				"type": "object",
+				"properties": {
+					"sessionId": {
+						"type": "string",
+						"description": "Session identifier",
+						"example": "85e57aab4334"
+					},
+					"permissionQueries": {
+						"$ref": "#/components/schemas/AuthPermissionQueries"
+					}
+				},
+				"description": "Authentication request via a session identifier."
+			},
+			"AuthViaDelegated": {
+				"required": [
+					"username"
+				],
+				"type": "object",
+				"properties": {
+					"username": {
+						"type": "string",
+						"example": "jdoe"
+					},
+					"permissionQueries": {
+						"$ref": "#/components/schemas/AuthPermissionQueries"
+					},
+					"forResults": {
+						"$ref": "#/components/schemas/AuthResultsList"
+					}
+				},
+				"description": "Authentication request via delegated access"
+			},
+			"AuthPermissionQueries": {
+				"type": "array",
+				"description": "A list of permission queries to perform on a successful authentication",
+				"items": {
+					"$ref": "#/components/schemas/UserPermissionQuery"
+				}
+			},
+			"AuthStepChangePassword": {
+				"required": [
+					"newPassword",
+					"partialAuthToken"
+				],
+				"type": "object",
+				"properties": {
+					"partialAuthToken": {
+						"type": "string",
+						"example": "3bc0c9c7d1bb"
+					},
+					"capabilities": {
+						"$ref": "#/components/schemas/AuthCapabilitiesList"
+					},
+					"newPassword": {
+						"type": "string",
+						"example": "hunter2"
+					}
+				},
+				"example": {
+					"partialAuthToken": "abcdef-1234567890",
+					"capabilities": [
+						"Finish"
+					],
+					"newPassword": "hunter2"
+				}
+			},
+			"AuthStepTfa": {
+				"type": "object",
+				"description": "Two-factor authentication step parameters.",
+				"example": {
+					"partialAuthToken": "abcdef-1234567890",
+					"capabilities": [
+						"Finish"
+					],
+					"code": "123987"
+				}
+			},
+			"AuthStepRecaptcha2": {
+				"required": [
+					"partialAuthToken",
+					"response"
+				],
+				"type": "object",
+				"properties": {
+					"partialAuthToken": {
+						"minLength": 1,
+						"type": "string"
+					},
+					"capabilities": {
+						"$ref": "#/components/schemas/AuthCapabilitiesList"
+					},
+					"response": {
+						"minLength": 1,
+						"type": "string",
+						"description": "Response token provided by reCAPTCHA"
+					}
+				},
+				"description": "Recaptcha response parameters"
+			},
+			"AuthStepFinish": {
+				"required": [
+					"partialAuthToken"
+				],
+				"type": "object",
+				"properties": {
+					"partialAuthToken": {
+						"type": "string",
+						"example": "3bc0c9c7d1bb"
+					},
+					"forResults": {
+						"$ref": "#/components/schemas/AuthResultsList"
+					}
+				}
+			},
+			"AuthCapabilitiesList": {
+				"type": "array",
+				"description": "List of capabilities supported by the calling party",
+				"example": [
+					"ChangePassword",
+					"Finish"
+				],
+				"items": {
+					"type": "string",
+					"enum": [
+						"ChangePassword",
+						"Finish",
+						"Recaptcha2",
+						"Tfa",
+						"TfaCookie"
+					]
+				}
+			},
+			"AuthResultsList": {
+				"type": "array",
+				"description": "List of requested authentication results.",
+				"example": [
+					"SessionId"
+				],
+				"items": {
+					"type": "string",
+					"enum": [
+						"UserAccessToken",
+						"SessionId"
+					]
+				}
+			},
+			"AuthResponse": {
+				"type": "object",
+				"properties": {
+					"userId": {
+						"minimum": 1,
+						"type": "number",
+						"description": "ID of the authenticated user"
+					},
+					"userAccessToken": {
+						"type": "string",
+						"description": "User Access Token, if one was requested.",
+						"example": "9b61a9cea31d"
+					},
+					"sessionId": {
+						"type": "string",
+						"description": "Session ID, if one was requested.",
+						"example": "e5f46349978e"
+					},
+					"permissionQueryResults": {
+						"type": "array",
+						"description": "Results of the requested permission queries",
+						"items": {
+							"$ref": "#/components/schemas/UserPermissionQueryResult"
+						}
+					},
+					"info": {
+						"type": "object",
+						"properties": {
+							"username": {
+								"type": "string",
+								"description": "Username of the authenticated user"
+							},
+							"agencyId": {
+								"type": "integer",
+								"description": "Agency under which the user belongs"
+							},
+							"agencyName": {
+								"type": "string",
+								"description": "Agency name for the agencyId field"
+							},
+							"topAgencyId": {
+								"type": "integer",
+								"description": "Top-level agency under which the user belongs"
+							},
+							"topAgencyName": {
+								"type": "string",
+								"description": "Top-level gency name for the agencyId field"
+							}
+						},
+						"description": "Additional informative fields. The client must not depend on any of these values being set",
+						"example": {
+							"username": "jdoe",
+							"agencyId": 7,
+							"agencyName": "Foo Agency",
+							"topAgencyId": 7,
+							"topAgencyName": "Foo Agency"
+						}
+					}
+				},
+				"description": "Response to an authentication request"
+			},
+			"AuthPartialResponse": {
+				"required": [
+					"partial"
+				],
+				"type": "object",
+				"properties": {
+					"partial": {
+						"type": "boolean",
+						"description": "Always true. This property can be used to tell a partial response apart from a final response."
+					},
+					"nextStep": {
+						"type": "string",
+						"enum": [
+							"ChangePassword",
+							"Finish",
+							"Recaptcha2",
+							"Tfa"
+						]
+					},
+					"nextStepParams": {
+						"type": "object",
+						"properties": {},
+						"description": "Additional parameters for the next step"
+					},
+					"partialAuthToken": {
+						"type": "string",
+						"example": "aaa495c8452a"
+					}
+				},
+				"description": "Response to an authentication request when only a partial authentication has been performed",
+				"example": {
+					"partial": true,
+					"nextStep": "Finish",
+					"partialAuthToken": "abcdef-1234567890"
+				}
+			},
+			"AuthPartialResponseTfa": {
+				"allOf": [
+					{
+						"$ref": "#/components/schemas/AuthPartialResponse"
+					},
+					{
+						"type": "object",
+						"properties": {
+							"cookie": {
+								"required": [
+									"value"
+								],
+								"type": "object",
+								"properties": {
+									"value": {
+										"type": "string",
+										"description": "Can be sent in the \"cookie\" field during future Tfa step requests."
+									},
+									"expires": {
+										"type": "string",
+										"format": "date-time"
+									}
+								},
+								"description": "Cookie parameters, which can be used to skip the TFA step in the future. The parameter is returned only when the request was made with the TfaCookie capability."
+							}
+						}
+					}
+				]
+			},
+			"BindingScope": {
+				"required": [
+					"code"
+				],
+				"type": "object",
+				"properties": {
+					"code": {
+						"type": "string",
+						"description": "Scope code"
+					},
+					"params": {
+						"type": "object",
+						"properties": {},
+						"description": "Parameters object for the scope. The required schema of ths property is dependent of the code property. The exact schemas can be requested through the /scopes endpoint."
+					}
+				},
+				"description": "Describes the scope of a binding",
+				"example": {
+					"code": "agency.own"
+				}
+			},
+			"ErrorResponse": {
+				"required": [
+					"code",
+					"message"
+				],
+				"type": "object",
+				"properties": {
+					"code": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string",
+						"description": "Human-readable error message"
+					}
+				},
+				"example": {
+					"code": "Validation",
+					"message": "Invalid parameter supplied"
+				}
+			},
+			"Permission": {
+				"required": [
+					"code"
+				],
+				"type": "object",
+				"properties": {
+					"code": {
+						"pattern": "^[a-z0-9]+(-[a-z0-9]+)*(\\.[a-z0-9]+(-[a-z0-9]+)*)+$",
+						"type": "string",
+						"description": "Unique permission identifier. A valid permission code consists of 2 or more lower-case alpha-numeric kebab-case component names, separated by periods. The component names should end up describing a hierarchy of namespaces with the last component being the permission itself."
+					},
+					"description": {
+						"type": "string",
+						"description": "Human-readable short description of the permission"
+					},
+					"bindingUserLevels": {
+						"type": "array",
+						"description": "User levels to which this permission can be granted to. An empty value means this permission cannot be granted to anybody.",
+						"items": {
+							"$ref": "#/components/schemas/UserLevelCode"
+						}
+					},
+					"granterUserLevels": {
+						"type": "array",
+						"description": "User levels who can grant this permission. An empty value means that nobody can grant this permission.",
+						"items": {
+							"$ref": "#/components/schemas/UserLevelCode"
+						}
+					},
+					"scopes": {
+						"type": "array",
+						"description": "List of scope names which can be used for binding this permission. If this field is not set, the permission does not support scoping. If this field has at least one value, the permission must always be bound with a scope.",
+						"items": {
+							"type": "string",
+							"description": "Scope identifier. A list of possible scopes can be requested via /scopes"
+						}
+					},
+					"meta": {
+						"type": "object",
+						"properties": {
+							"publicApi": {
+								"type": "boolean",
+								"description": "Indicates that the permission grants access to an API meant for public consumption",
+								"default": false
+							}
+						},
+						"description": "Additional meta-information. May contain any properties using any types"
+					}
+				},
+				"description": "Description of a permission known to the system",
+				"example": {
+					"code": "iam.users.view",
+					"description": "View user information",
+					"scopes": [
+						"managed",
+						"agency.global",
+						"agency.own",
+						"agency.direct"
+					],
+					"granterUserLevels": [
+						"titanium",
+						"top-agency",
+						"agency"
+					],
+					"bindingUserLevels": [
+						"titanium",
+						"top-agency",
+						"agency"
+					]
+				}
+			},
+			"PermissionBinding": {
+				"required": [
+					"code"
+				],
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"description": "An identifier for the binding. Only unique within the parent resource."
+					},
+					"code": {
+						"type": "string",
+						"description": "Permission code"
+					},
+					"scope": {
+						"$ref": "#/components/schemas/BindingScope"
+					}
+				},
+				"description": "Relation between a permission and a resource such as a user or a group. The scope property is set if and only if the permission identified by code requires it."
+			},
+			"PermissionBindingList": {
+				"required": [
+					"permissions"
+				],
+				"type": "object",
+				"properties": {
+					"permissions": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/PermissionBinding"
+						}
+					}
+				},
+				"description": "A list of PermissionBinding objects"
+			},
+			"PermissionBindingRef": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"description": "Binding ID"
+					}
+				},
+				"description": "Reference to a PermissionBinding object"
+			},
+			"PermissionAvailableList": {
+				"required": [
+					"permissions"
+				],
+				"type": "object",
+				"properties": {
+					"permissions": {
+						"type": "array",
+						"items": {
+							"required": [
+								"permission"
+							],
+							"type": "object",
+							"properties": {
+								"permission": {
+									"$ref": "#/components/schemas/Permission"
+								},
+								"scopes": {
+									"type": "array",
+									"description": "List of allowed scope named, if the permission is scope-aware",
+									"items": {
+										"type": "string",
+										"description": "Scope code"
+									}
+								}
+							}
+						}
+					},
+					"limit": {
+						"minimum": 0,
+						"type": "integer",
+						"description": "Number of rows to which the response has been limited to"
+					},
+					"nextPointer": {
+						"type": "string",
+						"description": "Pointer value for getting the next set of rows"
+					}
+				},
+				"description": "A list of available permissions objects"
+			},
+			"PermissionList": {
+				"required": [
+					"permissions"
+				],
+				"type": "object",
+				"properties": {
+					"permissions": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/Permission"
+						}
+					}
+				},
+				"description": "A list of Permission objects"
+			},
+			"PermissionRef": {
+				"required": [
+					"code"
+				],
+				"type": "object",
+				"properties": {
+					"code": {
+						"type": "string"
+					}
+				},
+				"description": "Reference to a Permission object"
+			},
+			"Policy": {
+				"required": [
+					"bindingUserLevels",
+					"granterUserLevels",
+					"name"
+				],
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"name": {
+						"$ref": "#/components/schemas/PolicyName"
+					},
+					"ownerAgencyId": {
+						"minimum": 1,
+						"type": "integer",
+						"description": "The agency which this policy belongs to. Not set for managed policies"
+					},
+					"managed": {
+						"type": "boolean",
+						"description": "Is this a managed policy"
+					},
+					"bindingUserLevels": {
+						"minItems": 1,
+						"uniqueItems": true,
+						"type": "array",
+						"description": "User levels to which this policy can be granted to. Only permissions having the same binding user levels can be added to this policy.",
+						"items": {
+							"$ref": "#/components/schemas/UserLevelCode"
+						}
+					},
+					"granterUserLevels": {
+						"minItems": 1,
+						"uniqueItems": true,
+						"type": "array",
+						"description": "User levels who can grant this policy. Only permissions having the same granter user levels can be added to this policy.",
+						"items": {
+							"$ref": "#/components/schemas/UserLevelCode"
+						}
+					},
+					"scopes": {
+						"minItems": 1,
+						"uniqueItems": true,
+						"type": "array",
+						"description": "List of scope codes which can be used for binding this policy. If this field is not set, the policy does not support scoping. If this field has at least one value, the policy must always be bound with a scope. Any scopes specified in this list must also be allowed for every permission in this policy.",
+						"items": {
+							"type": "string",
+							"description": "Scope identifier. A list of possible scopes can be requested via /scopes"
+						}
+					},
+					"permissions": {
+						"type": "array",
+						"description": "Permissions in this policy",
+						"items": {
+							"type": "string",
+							"description": "Permission code"
+						}
+					}
+				},
+				"example": {
+					"id": "7320cbbe24a9",
+					"name": "Manage Users",
+					"ownerAgencyId": 7,
+					"bindingUserlevels": [
+						"top-agency",
+						"agency"
+					],
+					"granterUserLevels": [
+						"top-agency",
+						"agency"
+					],
+					"scopes": [
+						"agency.own",
+						"agency.direct"
+					],
+					"permissions": [
+						"iam.users.view",
+						"iam.users.edit"
+					]
+				}
+			},
+			"PolicyBinding": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"description": "Identifier for the relation. The value is unique only within a single resource",
+						"readOnly": true
+					},
+					"policyId": {
+						"type": "string",
+						"description": "The bound policy"
+					},
+					"scope": {
+						"$ref": "#/components/schemas/BindingScope"
+					}
+				},
+				"description": "Binding between a policy and a resource",
+				"example": {
+					"id": "3b532419a9c9",
+					"policyId": "3ccb56b05c84",
+					"scope": {
+						"code": "agency.own"
+					}
+				}
+			},
+			"PolicyBindingList": {
+				"type": "object",
+				"properties": {
+					"bindings": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/PolicyBinding"
+						}
+					}
+				}
+			},
+			"PolicyBindingRef": {
+				"required": [
+					"id"
+				],
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"description": "Binding ID, unique within the parent resource"
+					}
+				}
+			},
+			"PolicyEdit": {
+				"required": [
+					"name"
+				],
+				"type": "object",
+				"properties": {
+					"name": {
+						"$ref": "#/components/schemas/PolicyName"
+					}
+				}
+			},
+			"PolicyList": {
+				"type": "object",
+				"properties": {
+					"policies": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/Policy"
+						}
+					}
+				}
+			},
+			"PolicyName": {
+				"minLength": 1,
+				"type": "string",
+				"description": "A human-readable name for the policy"
+			},
+			"PolicyPermission": {
+				"required": [
+					"code"
+				],
+				"type": "object",
+				"properties": {
+					"code": {
+						"type": "string",
+						"description": "Permission code"
+					}
+				},
+				"description": "A permission in policy"
+			},
+			"PolicyResponse": {
+				"type": "object",
+				"properties": {
+					"policies": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/Policy"
+						}
+					},
+					"limit": {
+						"minimum": 0,
+						"type": "integer",
+						"description": "Number of rows to which the response has been limited"
+					},
+					"nextPointer": {
+						"type": "string",
+						"description": "Pointer value for getting the next set of rows"
+					}
+				}
+			},
+			"PolicyUsersResponse": {
+				"required": [
+					"users"
+				],
+				"type": "object",
+				"properties": {
+					"users": {
+						"type": "array",
+						"items": {
+							"type": "object",
+							"properties": {
+								"user": {
+									"$ref": "#/components/schemas/User"
+								},
+								"via": {
+									"type": "array",
+									"description": "List resource chains",
+									"items": {
+										"type": "array",
+										"description": "Chain of resources which caused this permission to be allowed",
+										"items": {
+											"$ref": "#/components/schemas/AllowViaResource"
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"description": "A list of objects"
+			},
+			"Scope": {
+				"required": [
+					"bindingUserLevels",
+					"code",
+					"granterUserLevels"
+				],
+				"type": "object",
+				"properties": {
+					"code": {
+						"minLength": 1,
+						"type": "string",
+						"description": "Unique code identifying this scope"
+					},
+					"description": {
+						"type": "string",
+						"description": "Short human-readable description of this scope"
+					},
+					"bindingsParams": {
+						"type": "object",
+						"properties": {},
+						"description": "A valid JSON schema object describing the expected parameters when binding with this scope"
+					},
+					"bindingUserLevels": {
+						"minItems": 1,
+						"uniqueItems": true,
+						"type": "array",
+						"description": "User levels which can have a binding with this scope",
+						"items": {
+							"$ref": "#/components/schemas/UserLevelCode"
+						}
+					},
+					"granterUserLevels": {
+						"minItems": 1,
+						"uniqueItems": true,
+						"type": "array",
+						"description": "User levels which can create a binding with this scope",
+						"items": {
+							"$ref": "#/components/schemas/UserLevelCode"
+						}
+					}
+				},
+				"description": "A binding scope definition",
+				"example": {
+					"code": "agency.own",
+					"description": "Resources in user's agency and sub-agencies",
+					"bindingUserLevels": [
+						"top-agency",
+						"agency"
+					],
+					"granterUserLevels": [
+						"titanium",
+						"top-agency",
+						"agency"
+					]
+				}
+			},
+			"ScopeList": {
+				"required": [
+					"scopes"
+				],
+				"type": "object",
+				"properties": {
+					"scopes": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/Scope"
+						}
+					}
+				},
+				"description": "List of Scope objects"
+			},
+			"DelegatedAuthUser": {
+				"required": [
+					"id",
+					"username"
+				],
+				"type": "object",
+				"properties": {
+					"id": {
+						"minimum": 0,
+						"type": "integer"
+					},
+					"username": {
+						"type": "string"
+					}
+				},
+				"description": "Describes a user that is eligible for delegated authentication"
+			},
+			"User": {
+				"required": [
+					"id"
+				],
+				"type": "object",
+				"properties": {
+					"id": {
+						"minimum": 0,
+						"type": "integer"
+					},
+					"username": {
+						"type": "string"
+					},
+					"agencyId": {
+						"minimum": 0,
+						"type": "integer"
+					},
+					"topAgencyId": {
+						"minimum": 0,
+						"type": "integer"
+					},
+					"pictureUrl": {
+						"type": "string",
+						"format": "url"
+					},
+					"isApiUser": {
+						"type": "boolean"
+					},
+					"timezone": {
+						"type": "string",
+						"description": "The user's preferred timezone, if one has been configured. The value is a timezone name from the tz database: https://www.iana.org/time-zones"
+					},
+					"lang": {
+						"pattern": "^[a-z]{2}-[a-z]{2}$",
+						"type": "string",
+						"description": "Language tag consisting of: a 2-character ISO 639-1 language code, followed by a minus sign, followed by a lower-case ISO 3166-1 alpha-2 country code."
+					}
+				},
+				"description": "A user",
+				"example": {
+					"id": 727,
+					"username": "jdoe",
+					"agencyId": 12,
+					"topAgencyId": 7,
+					"timezone": "Europe/Tallinn",
+					"lang": "en-gn"
+				}
+			},
+			"UserLevel": {
+				"type": "object",
+				"properties": {
+					"code": {
+						"$ref": "#/components/schemas/UserLevelCode"
+					},
+					"description": {
+						"type": "string",
+						"description": "Short description of this user level"
+					}
+				},
+				"description": "User level definition",
+				"example": {
+					"code": "agency",
+					"description": "Broker agencies"
+				}
+			},
+			"UserLevelCode": {
+				"type": "string",
+				"description": "Code of a user level",
+				"enum": [
+					"titanium",
+					"agency",
+					"top-agency"
+				]
+			},
+			"UserPermissionQuery": {
+				"required": [
+					"code"
+				],
+				"type": "object",
+				"properties": {
+					"code": {
+						"minLength": 1,
+						"type": "string",
+						"description": "Permission code"
+					},
+					"context": {
+						"type": "object",
+						"properties": {},
+						"description": "Permission checking context. Whether this field is allowed or required depends on each specific permission code. Specific information about permissions and their context requirements can be requested via /permissions"
+					}
+				},
+				"description": "Query for the allow/deny status of a single permission on a user",
+				"example": {
+					"code": "iam.users.view",
+					"context": {
+						"agencyId": 7
+					}
+				}
+			},
+			"UserPermissionQueryList": {
+				"required": [
+					"queries"
+				],
+				"type": "object",
+				"properties": {
+					"queries": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/UserPermissionQuery"
+						}
+					}
+				},
+				"description": "A list of UserPermissionQuery objects"
+			},
+			"UserPermissionQueryResult": {
+				"required": [
+					"allow"
+				],
+				"type": "object",
+				"properties": {
+					"code": {
+						"type": "string",
+						"description": "Permission code (deprecated)",
+						"example": "iam.users.view"
+					},
+					"allow": {
+						"type": "boolean",
+						"description": "Indicated whether the user has the permission",
+						"example": true
+					},
+					"allowVia": {
+						"type": "array",
+						"description": "Chain of resources and bindings which allowed this permission",
+						"example": [
+							{
+								"type": "user.policy",
+								"id": "abc123"
+							},
+							{
+								"type": "user",
+								"id": 727
+							}
+						],
+						"items": {
+							"$ref": "#/components/schemas/AllowViaResource"
+						}
+					},
+					"timeToLive": {
+						"minimum": 0,
+						"type": "number",
+						"description": "Number of seconds for which this result may be cached for. A missing value, or zero, indicates that no caching is allowed.",
+						"example": 300
+					}
+				},
+				"description": "Response to a UserPermissionQuery"
+			},
+			"UserPermissionQueryResultList": {
+				"required": [
+					"results"
+				],
+				"type": "object",
+				"properties": {
+					"results": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/UserPermissionQueryResult"
+						}
+					}
+				},
+				"description": "A list of UserPermissionQueryResult objects"
+			},
+			"PermissionAllowedContextsQueryList": {
+				"required": [
+					"queries"
+				],
+				"type": "object",
+				"properties": {
+					"queries": {
+						"type": "array",
+						"items": {
+							"required": [
+								"code"
+							],
+							"type": "object",
+							"properties": {
+								"code": {
+									"minLength": 1,
+									"type": "string",
+									"description": "Permission code"
+								},
+								"explain": {
+									"type": "boolean",
+									"description": "Fill the \"via\" properties",
+									"default": false
+								}
+							}
+						}
+					}
+				},
+				"example": {
+					"queries": [
+						{
+							"code": "iam.users.view"
+						},
+						{
+							"code": "iam.users.permissions.query"
+						}
+					]
+				}
+			},
+			"PermissionAllowedContexts": {
+				"type": "object",
+				"properties": {
+					"allowed": {
+						"type": "array",
+						"items": {
+							"type": "object",
+							"properties": {
+								"via": {
+									"type": "array",
+									"description": "Chain of resources which caused this context to be allowed",
+									"items": {
+										"$ref": "#/components/schemas/AllowViaResource"
+									}
+								},
+								"context": {
+									"type": "object",
+									"properties": {},
+									"description": "A specific context"
+								}
+							}
+						}
+					}
+				},
+				"description": "Describes contexts in which some permission is allowed",
+				"example": {
+					"allowed": [
+						{
+							"context": {
+								"agencyId": 7
+							}
+						},
+						{
+							"context": {
+								"agencyId": 14
+							}
+						},
+						{
+							"any": {
+								"managed": true
+							}
+						}
+					]
+				}
+			},
+			"PermissionAllowedContextsList": {
+				"type": "object",
+				"properties": {
+					"results": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/PermissionAllowedContexts"
+						}
+					}
+				}
+			},
+			"PermissionUsersResponse": {
+				"required": [
+					"users"
+				],
+				"type": "object",
+				"properties": {
+					"users": {
+						"type": "array",
+						"items": {
+							"type": "object",
+							"properties": {
+								"user": {
+									"$ref": "#/components/schemas/User"
+								},
+								"via": {
+									"type": "array",
+									"description": "List resource chains",
+									"items": {
+										"type": "array",
+										"description": "Chain of resources which caused this permission to be allowed",
+										"items": {
+											"$ref": "#/components/schemas/AllowViaResource"
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"description": "A list of objects"
+			},
+			"PermissionPoliciesResponse": {
+				"type": "object",
+				"properties": {
+					"users": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/Policy"
+						}
+					}
+				},
+				"description": "A list of policies"
+			},
+			"UsersResponse": {
+				"required": [
+					"users"
+				],
+				"type": "object",
+				"properties": {
+					"users": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/User"
+						}
+					},
+					"limit": {
+						"minimum": 0,
+						"type": "integer",
+						"description": "Number of rows to which the response has been limited"
+					},
+					"nextPointer": {
+						"type": "string",
+						"description": "Pointer value for getting the next set of rows"
+					}
+				},
+				"description": "A list of User objects"
+			},
+			"UserPasswordChange": {
+				"required": [
+					"newPassword"
+				],
+				"type": "object",
+				"properties": {
+					"currentPassword": {
+						"minLength": 1,
+						"type": "string",
+						"description": "Current password. This value is required when changing the password of the acting user."
+					},
+					"newPassword": {
+						"type": "string"
+					}
+				},
+				"description": "User password change request parameters"
+			},
+			"UserTfaEnable": {
+				"required": [
+					"code"
+				],
+				"type": "object",
+				"properties": {
+					"code": {
+						"type": "string",
+						"description": "Code generated using the parameters from the configuration step."
+					}
+				}
+			},
+			"UserTfaDisable": {
+				"type": "object",
+				"properties": {
+					"password": {
+						"type": "string",
+						"description": "Current password. Not required when manipulating other users."
+					}
+				}
+			},
+			"AllowViaResource": {
+				"required": [
+					"type"
+				],
+				"type": "object",
+				"properties": {
+					"type": {
+						"type": "string",
+						"description": "Type of the resource",
+						"enum": [
+							"user",
+							"user.policy",
+							"policy"
+						]
+					}
+				},
+				"description": "Reference to some kind of resource"
+			},
+			"Error": {
+				"required": [
+					"code"
+				],
+				"type": "object",
+				"properties": {
+					"code": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					}
+				}
+			},
+			"DeleteSession": {
+				"required": [
+					"sessionId"
+				],
+				"type": "object",
+				"properties": {
+					"sessionId": {
+						"type": "string",
+						"description": "Session identifier",
+						"example": "85e57aab4334"
+					}
+				},
+				"description": "Request parameters for deleting a session"
+			},
+			"UserNoteAdd": {
+				"required": [
+					"content"
+				],
+				"type": "object",
+				"properties": {
+					"content": {
+						"maxLength": 65535,
+						"minLength": 1,
+						"type": "string"
+					}
+				}
+			},
+			"UserNote": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"minLength": 1,
+						"type": "string"
+					},
+					"userId": {
+						"minimum": 1,
+						"type": "integer",
+						"description": "User that this note belongs to"
+					},
+					"actorUserId": {
+						"minimum": 1,
+						"type": "integer",
+						"description": "User that created this note"
+					},
+					"content": {
+						"type": "string",
+						"description": "Note contents"
+					},
+					"createDateTime": {
+						"type": "string",
+						"format": "date-time"
+					}
+				}
+			}
+		},
+		"responses": {
+			"authDone": {
+				"description": "User was successfully authenticated",
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/AuthResponse"
+						}
+					}
+				}
+			},
+			"authError": {
+				"description": "The user could not be authenticated.",
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/ErrorResponse"
+						}
+					}
+				}
+			},
+			"authMaybeDone": {
+				"description": "Authenticated",
+				"content": {
+					"application/json": {
+						"schema": {
+							"type": "object"
+						}
+					}
+				}
+			},
+			"authPartialDone": {
+				"description": "Authenticated, but further steps are required",
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/AuthPartialResponse"
+						}
+					}
+				}
+			}
+		},
+		"parameters": {
+			"pathUserId": {
+				"name": "userId",
+				"in": "path",
+				"required": true,
+				"schema": {
+					"minimum": 1,
+					"type": "integer"
+				}
+			},
+			"userPermissionId": {
+				"name": "userPermissionId",
+				"in": "path",
+				"required": true,
+				"schema": {
+					"type": "string"
+				}
+			},
+			"pathPolicyId": {
+				"name": "policyId",
+				"in": "path",
+				"required": true,
+				"schema": {
+					"type": "string"
+				}
+			},
+			"permissionCodeInPath": {
+				"name": "permissionCode",
+				"in": "path",
+				"required": true,
+				"schema": {
+					"type": "string"
+				}
+			},
+			"pagingLimitInQuery": {
+				"name": "limit",
+				"in": "query",
+				"description": "Limit the number of returned results to this value",
+				"schema": {
+					"maximum": 50,
+					"minimum": 1,
+					"type": "integer",
+					"default": 50
+				}
+			},
+			"pagingPointerInQuery": {
+				"name": "pointer",
+				"in": "query",
+				"description": "Value of nextPointer returned in the response to a previous request",
+				"schema": {
+					"type": "string"
+				}
+			},
+			"agencyIdInQuery": {
+				"name": "agencyId",
+				"in": "query",
+				"description": "Filter by a specific agency",
+				"schema": {
+					"minimum": 1,
+					"type": "number"
+				}
+			},
+			"agencyIdMatchInQuery": {
+				"name": "agencyIdMatch",
+				"in": "query",
+				"description": "Agency ID matching method: - `direct` returns only users directly under the queried agency - `recursive` returns users from the specified agency and sub-agencies",
+				"schema": {
+					"type": "string",
+					"default": "direct",
+					"enum": [
+						"direct",
+						"recursive"
+					]
+				}
+			},
+			"managedInQuery": {
+				"name": "managed",
+				"in": "query",
+				"description": "Show only managed or non-managed users",
+				"schema": {
+					"type": "boolean"
+				}
+			},
+			"usernameInQuery": {
+				"name": "username",
+				"in": "query",
+				"description": "Query by an username",
+				"allowEmptyValue": false,
+				"schema": {
+					"type": "string"
+				}
+			},
+			"usernameMatchInQuery": {
+				"name": "usernameMatch",
+				"in": "query",
+				"description": "Username matching method: - `exact` returns only users where the username matches exactly. - `pattern` treats the `username` parameter as a pattern which may contain the wildcard character `*`",
+				"schema": {
+					"type": "string",
+					"default": "exact",
+					"enum": [
+						"exact",
+						"pattern"
+					]
+				}
+			}
+		}
+	}
+}

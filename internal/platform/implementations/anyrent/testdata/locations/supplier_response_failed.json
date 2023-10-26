@@ -1,0 +1,7 @@
+{
+	"error": {
+		"http_code": 404,
+		"code": "SupplierError",
+		"message": "Token not provided"
+	}
+}

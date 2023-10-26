@@ -1,0 +1,66 @@
+{
+	"pickUp": {
+		"code": "DEN",
+		"dateTime": "2023-04-25T10:00:00Z",
+		"country": "US",
+		"iata": "DEN"
+	},
+	"dropOff": {
+		"code": "DEN",
+		"dateTime": "2023-05-09T10:00:00Z",
+		
+		"country": "US",
+		"iata": "DEN"
+	},
+	"rentalDays": 14,
+	"onlineExtras": true,
+	"residenceCountry": "US",
+	"age": 30,
+	"moduleId": 260,
+	"contract": {
+		"currency": "USD",
+		"supplierId": 76,
+		"contractId": "43803",
+		"paymentType": 0,
+		"markUp": 20
+	},
+	"taxRate": 1.0290000009536744,
+	"supplierRateReference": "{\"fromRates\":\"QXVLHI6PJQ70884-6301\",\"estimatedTotalAmount\":\"346.18\",\"estimatedTotalAmountCurrency\":\"EUR\"}",
+	"configuration": {
+		"supplierApiUrl": "{{supplierApiUrl}}",
+		"vendorCode": "ZE",
+		"vendorCodeImport": "ZE",
+		"vehicleWhereAtMapping": {
+			"LAP": 14,
+			"LDT": 7,
+			"LAM": 4,
+			"LHT": 5
+		},
+		"sendVoucher": true,
+		"taxExclCoverageCountries": [
+			"NO",
+			"SE",
+			"DK"
+		],
+		"extraMappingForImport": {
+			"CSI": 7,
+			"NEV": 13,
+			"BST": 9,
+			"CST": 8
+		},
+		"sendBookingDataForRates": true,
+		"fpPayFeesLocally": false,
+		"vc": "T20C3I9N14T",
+		"vn": "T007",
+		"cp": "D4D6"
+	},
+	"timeouts": {
+		"default": 5000,
+		"booking": 60000
+	},
+	"branchExtras": [
+		"7",
+		"8",
+		"9"
+	]
+}

@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# source runner
+. "$(dirname "$0")/_/hooks.sh"
+
+# store the current branch
+branch=$(git rev-parse --abbrev-ref HEAD)
+
+# filters in only changes in the generators folder
+changes=$(git diff --cached --name-only | grep deploy/generators/ || true)
+
+if [ -n "$changes" ]; then
+	# Build normal templates
+	if [ $branch != *-canary ]; then
+		make compile-templates
+		echo '-- Ammending template changes to commit'
+		git add deploy/*.json || true
+	fi
+
+fi

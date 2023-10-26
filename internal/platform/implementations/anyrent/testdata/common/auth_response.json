@@ -1,0 +1,5 @@
+{
+	"token": "test-token",
+	"token_type": "bearer",
+	"expiration": 3600
+}

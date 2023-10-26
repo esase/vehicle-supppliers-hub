@@ -1,0 +1,78 @@
+{
+	"errors": [],
+	"locations": [
+	{
+		"city": "Salta 2",
+		"code": "169",
+		"country": "AR",
+		"email": "bookings@streetrentacar2.com",
+		"latitude": -24.790268,
+		"longitude": -65.40588,
+		"name": "Airport",
+		"openingHours": [],
+		"phone": "+54 11 3582-9237",
+		"rawData": {
+			"content": "{\"id\":169,\"country\":\"AR\",\"city\":\"Salta 2\",\"phone\":\"+54 11 3582-9237\",\"email\":\"bookings@streetrentacar2.com\",\"supplierId\":9,\"longitude\":-65.40588,\"latitude\":-24.790268,\"type\":\"Airport\",\"serviceType\":\"Walking\",\"attentionSchedule\":{\"id\":1,\"timezoneId\":\"Argentina Standard Time\",\"timezoneUTCOffset\":\"-03:00:00\",\"gapForBookingTime\":15,\"gap\":0,\"schedule\":{\"monday\":[],\"tuesday\":[],\"wednesday\":[],\"thursday\":[],\"friday\":[],\"saturday\":[],\"sunday\":[],\"holiday\":[]}}}",
+			"contentType": "application/json"
+		}
+	},
+	{
+		"city": "Salta 3",
+		"code": "169",
+		"country": "AR",
+		"email": "bookings@streetrentacar3.com",
+		"latitude": -24.790268,
+		"longitude": -65.40588,
+		"name": "Airport",
+		"openingHours": [
+		{
+			"end": "20:00",
+			"open": true,
+			"start": "08:00",
+			"weekday": 1
+		},
+		{
+			"end": "20:00",
+			"open": true,
+			"start": "08:00",
+			"weekday": 2
+		},
+		{
+			"end": "20:00",
+			"open": true,
+			"start": "08:00",
+			"weekday": 3
+		},
+		{
+			"end": "20:00",
+			"open": true,
+			"start": "08:00",
+			"weekday": 4
+		},
+		{
+			"end": "20:00",
+			"open": true,
+			"start": "08:00",
+			"weekday": 5
+		},
+		{
+			"end": "20:00",
+			"open": true,
+			"start": "08:00",
+			"weekday": 6
+		},
+		{
+			"end": "20:00",
+			"open": true,
+			"start": "08:00",
+			"weekday": 7
+		}
+		],
+		"phone": "+54 11 3582-9237",
+		"rawData": {
+			"content": "{\"id\":169,\"country\":\"AR\",\"city\":\"Salta 3\",\"phone\":\"+54 11 3582-9237\",\"email\":\"bookings@streetrentacar3.com\",\"supplierId\":9,\"longitude\":-65.40588,\"latitude\":-24.790268,\"type\":\"Airport\",\"serviceType\":\"Walking\",\"attentionSchedule\":{\"id\":1,\"timezoneId\":\"Argentina Standard Time\",\"timezoneUTCOffset\":\"-03:00:00\",\"gapForBookingTime\":15,\"gap\":0,\"schedule\":{\"monday\":[{\"openedFrom\":\"08:00:00\",\"openedTo\":\"20:00:00\"}],\"tuesday\":[{\"openedFrom\":\"08:00:00\",\"openedTo\":\"20:00:00\"}],\"wednesday\":[{\"openedFrom\":\"08:00:00\",\"openedTo\":\"20:00:00\"}],\"thursday\":[{\"openedFrom\":\"08:00:00\",\"openedTo\":\"20:00:00\"}],\"friday\":[{\"openedFrom\":\"08:00:00\",\"openedTo\":\"20:00:00\"}],\"saturday\":[{\"openedFrom\":\"08:00:00\",\"openedTo\":\"20:00:00\"}],\"sunday\":[{\"openedFrom\":\"08:00:00\",\"openedTo\":\"20:00:00\"}],\"holiday\":[{\"openedFrom\":\"08:00:00\",\"openedTo\":\"20:00:00\"}]}}}",
+			"contentType": "application/json"
+		}
+	}
+	]
+}
